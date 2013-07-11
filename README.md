@@ -7,4 +7,4 @@
 == Installation ==
 * Pull latest git repo.
 * Run "npm install".
-* Run "node start".
+* Run "node app".

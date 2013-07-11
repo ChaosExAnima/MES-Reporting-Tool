@@ -1,7 +1,8 @@
 var express = require('express'),
 	stylus = require('stylus'),
 	nib = require('nib'),
-	app = express()
+	app = express(),
+	mongoose = require('mongoose')
 
 function compile(str, path) {
 	return stylus(str)
@@ -18,9 +19,26 @@ app.use(stylus.middleware({
 }))
 app.use(express.static(__dirname + '/public'))
 
-app.get('/', function(req, res) {
-	res.render('index', {title : 'Home'})
-})
+function init() {
+	var func = require('./functions.js')
 
-app.listen(3000)
-console.log('Starting up on port 3000.')
+	app.get('/', func.home)
+
+	// User Pages
+	app.get('/user', func.userList)
+	app.get('/user/:id', func.userDetail)
+	app.get('/user/add', func.userAdd)
+
+	// Start app
+	app.listen(3000)
+	console.log('Starting up on port 3000.')
+}
+
+// Connect to the DB
+mongoose.connect('mongodb://localhost/prestige')
+var db = mongoose.connection
+db.on('error', console.error.bind(console, 'connection error:'))
+db.once('open', function callback () {
+	console.log('success!')
+	init()
+})

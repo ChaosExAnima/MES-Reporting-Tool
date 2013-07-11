@@ -3,13 +3,23 @@ html
 	head
 		title #{title} - Prestige Site
 		link(rel='stylesheet', href='/stylesheets/style.css')
+		block scripts
 	body
 		header
 			h1 Prestige Site
+			block nav
+				- if(nav.length)
+				nav
+					ul
+					- each url, name in nav
+						li
+							- if (url == cururl)
+								a(href='#{url}', title='#{name}').current #{name}
+							- else
+								a(href='#{url}', title='#{name}') #{name}
+
 		.container
-			.main-content
-				block content
-			.sidebar
-				block sidebar
+			block content
+
 		footer
-			p Testing!
+			p Site by Ephraim Gregor, written in node.js and express.

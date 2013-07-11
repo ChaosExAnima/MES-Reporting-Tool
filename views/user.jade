@@ -1,0 +1,18 @@
+extends layout
+
+block content
+	table
+		thead
+			tr
+				th Name
+				th MES Number
+				th Expiration Date
+		- if(users.length)
+		- each user, i in users
+			tr
+				td: a(href="/user/"+user.id)= user.last + ', ' + user.first
+				td= user.mes
+				td= user.expire
+
+	p
+		a(href="/user/add") Create a new user

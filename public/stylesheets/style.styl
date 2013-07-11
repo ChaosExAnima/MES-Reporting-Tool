@@ -6,7 +6,7 @@
 /*
  * Grab a custom font from Google
  */
-@import url('http://fonts.googleapis.com/css?family=Quicksand')
+@import url('http://fonts.googleapis.com/css?family=Quicksand|Source+Sans+Pro')
 
 /*
  * Nib provides a CSS reset
@@ -17,44 +17,119 @@ global-reset()
  * Store the main color and
  * background color as variables
  */
-main-color = #fa5b4d
-background-color = #faf9f0
+main-color = rgb(100, 100, 250)
+background-color = rgb(250, 250, 240)
+text-color = rgb(68, 68, 68)
+
+/*
+ * Size variables
+ */
+main-width = 50em
+margin-width = 3em
+
 
 body
-  font-family 'Georgia'
+  font-family 'Source Sans Pro', sans-serif
   background-color background-color
-  color #444
+  color text-color
+  font-size 16px
+
+/*
+ * Typographic settings
+ */
+h1
+  font-size 2em
+
+h2
+  font-size 1.5em
+  margin-bottom .5em
+  color main-color
+
+a
+  text-decoration none
+  color text-color
+
+  &:hover
+    text-decoration underline
+
+table
+  width 100%
+  border-collapse collapse
+
+tr
+  padding .5em 0
+
+tbody
+  tr:nth-child(odd)
+      background-color darken(background-color, 10%)
+
+th
+td
+  &:last-child
+    text-align right
+
+th
+  color main-color
+  padding-bottom .5em
+
+td
+  padding .5em 0
+
+  &:first-child
+    padding-left .5em
+
+  &:last-child
+    padding-right .5em
+
+
+/*
+ * Structure
+ */
 
 header
-  font-family 'Quicksand'
-  padding 50px 10px
+  padding 2em 1em 1em
   color #fff
-  font-size 25px
-  text-align center
-
-  /*
-   * Note the use of the `main-color`
-   * variable and the `darken` function
-   */
+  overflow auto
   background-color main-color
   border-bottom 1px solid darken(main-color, 30%)
   text-shadow 0px -1px 0px darken(main-color, 30%)
 
+  h1
+    text-align center
+    font-family 'Quicksand', sans-serif
+
+  nav
+    width main-width
+    margin 1em auto 0
+
+  li
+    float left
+    list-style none
+    margin 1em
+
+    a
+      color #fff
+
+    .current
+      font-weight bold
+
+
+
 .container
-  width 500px
-  margin 50px auto
+  width main-width
+  margin margin-width auto
   overflow hidden
 
 .main-content
   float left
-  width 300px
+  width 60%
 
   p
-    margin-bottom 20px
+    margin-bottom 2em
 
 .sidebar
   float left
-  width 200px
+  width 40%
 
   .widget
 
@@ -65,7 +140,7 @@ header
      */
     border-radius 3px
     border 1px solid #ccc
-    margin-left 20px
+    margin-left margin-width
     background-color background-color
     box-shadow inset 0px 0px 0px 3px rgba(#fff, 0.8), 0px 3px 0px -2px rgba(#000, 0.1)
 
@@ -78,16 +153,17 @@ header
       margin-bottom 10px
 
     p
-      font-size 13px
-      padding 0px 10px
-      margin-bottom 10px
+      padding 0px 1em
+      margin-bottom 1em
 
 p
   line-height 1.8
 
 footer
-  width 500px
-  margin 50px auto
-  border-top 1px dotted #ccc
-  padding-top 5px
-  font-size 13px
+  width main-width
+  margin 3em auto
+  border-top 1px dotted darken(background-color, 30%)
+  padding-top .5em
+
+  p
+    font-size .75em
