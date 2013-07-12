@@ -1,0 +1,13 @@
+extends layout
+
+block content
+	form(action="/user/add", method="post")
+		label(class=fields.first[1]) First Name:
+			input(type="text", name="first", value=fields.first[0])
+		label(class=fields.last[1]) Last Name:
+			input(type="text", name="last", value=fields.last[0])
+		label(class=fields.mes[1]) MES #:
+			input(type="text", name="mes", value=fields.mes[0])
+		label(class=fields.expiration[1]) Expiration:
+			input(type="date", name="expiration", placeholder="YYYY-MM", value=fields.expiration[0])
+		input(type="submit", value="Submit", class="submit")

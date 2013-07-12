@@ -121,7 +121,7 @@ h1 {
 h2 {
   font-size: 1.5em;
   margin-bottom: 0.5em;
-  color: #6464fa;
+  color: #fa6464;
 }
 a {
   text-decoration: none;
@@ -145,7 +145,7 @@ td:last-child {
   text-align: right;
 }
 th {
-  color: #6464fa;
+  color: #fa6464;
   padding-bottom: 0.5em;
 }
 td {
@@ -157,6 +157,42 @@ td:first-child {
 td:last-child {
   padding-right: 0.5em;
 }
+label {
+  display: block;
+  margin: 1em 0;
+  width: 16em;
+}
+label input {
+  float: right;
+  -webkit-border-radius: 0.5em;
+  border-radius: 0.5em;
+  border: 1px solid #d5d582;
+  padding: 0.25em;
+}
+label input:focus {
+  border-color: #fa6464;
+}
+.button,
+.submit {
+  background: #fa6464;
+  border: 1px solid #ed0808;
+  padding: 0.5em;
+  color: #fff;
+  -webkit-border-radius: 0.5em;
+  border-radius: 0.5em;
+  cursor: pointer;
+  width: 6em;
+}
+.submit {
+  background: #46c846;
+  border-color: #1f681f;
+}
+.submit:hover {
+  background: #2b922b;
+}
+.error {
+  color: #ed0808;
+}
 /*
  * Structure
  */
@@ -164,9 +200,9 @@ header {
   padding: 2em 1em 1em;
   color: #fff;
   overflow: auto;
-  background-color: #6464fa;
-  border-bottom: 1px solid #0808ed;
-  text-shadow: 0px -1px 0px #0808ed;
+  background-color: #fa6464;
+  border-bottom: 1px solid #ed0808;
+  text-shadow: 0px -1px 0px #ed0808;
 }
 header h1 {
   text-align: center;
