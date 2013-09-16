@@ -29,6 +29,8 @@ text-color = rgb(68, 68, 68)
 main-width = 50em
 margin-width = 3em
 
+*
+  box-sizing border-box
 
 body
   font-family 'Source Sans Pro', sans-serif
@@ -71,6 +73,11 @@ td
   &:last-child
     text-align right
 
+  &.no-data
+    text-align center
+    font-style oblique
+    color lighten(text-color, 20%)
+
 th
   color main-color
   padding-bottom .5em
@@ -87,16 +94,25 @@ td
 label 
   display block
   margin 1em 0
-  width 16em
+  width 20em
+  height 2em
+  line-height 2em
 
   input
     float right
     border-radius .5em
     border 1px solid darken(background-color, 30%)
     padding .25em
+    height 2em
+    width 15em
 
     &:focus
       border-color main-color
+
+    &[type='checkbox']
+      height 1em
+      width 1em
+      margin 0.5em
 
 .button
   background main-color

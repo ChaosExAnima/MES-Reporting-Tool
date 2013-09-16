@@ -1,0 +1,8 @@
+extends layout
+
+block content
+	h2= user.name.last + ', ' + user.name.first
+	h3= user.mes
+	p= 'MC' + user.mc
+	p Expires 
+		span(class='date')= user.expire.getMonth() + '/' + user.expire.getDate() + '/' + user.expire.getFullYear()

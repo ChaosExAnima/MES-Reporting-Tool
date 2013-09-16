@@ -22,18 +22,19 @@ app.use(express.bodyParser())
 
 var log = console.log
 
-function init() {
-	var func = require('./functions.js'),
-		form = require('express-form')
-		field = form.field
+function setupRoutes() {
+	var form = require('express-form'),
+		field = form.field,
+		statics = require('./controllers/statics.js'),
+		users = require('./controllers/users.js')
 
 	form.configure({ autoTrim: true })
 
-	app.get('/', func.home)
+	app.get('/', statics.home)
 
 	// User Pages
-	// app.get('/user/:id', func.userDetail)
-	app.get('/user/add', func.userAdd)
+	app.get('/user/:id([A-Z]{2}\\d+)', users.userDetail)
+	app.get('/user/add', users.userAdd)
 	app.post('/user/add', 
 		form(
 			field('first').required().is(/^[a-z\.-\s]+$/i),
@@ -41,13 +42,9 @@ function init() {
 			field('mes').required().is(/^[a-z]{2}\d{10}$/i).toUpper(),
 			field('expiration').required().isDate()
 		), 
-		func.userSubmit
+		users.userSubmit
 	)
-	app.get('/user', func.userList)
-
-	// Start app
-	app.listen(3000)
-	log('Starting up on port 3000.')
+	app.get('/user', users.userList)
 }
 
 // Connect to the DB
@@ -56,5 +53,18 @@ var db = mongoose.connection
 db.on('error', console.error.bind(console, 'Connection error:'))
 db.once('open', function callback () {
 	log('Connected to DB.')
-	init()
+
+	// Bootstrap models
+	var models_path = __dirname + '/models',
+		fs = require('fs')
+	fs.readdirSync(models_path).forEach(function (file) {
+	  if (~file.indexOf('.js')) require(models_path + '/' + file)
+	})
+
+	// Initialize Routes
+	setupRoutes()
+
+	// Start app
+	app.listen(3000)
+	log('Starting up on port 3000.')
 })

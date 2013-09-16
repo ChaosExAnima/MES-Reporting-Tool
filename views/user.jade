@@ -10,9 +10,12 @@ block content
 		- if(users.length)
 		- each user, i in users
 			tr
-				td: a(href="/user/"+user.id)= user.last + ', ' + user.first
+				td: a(href="/user/"+user.mes)= user.name.last + ', ' + user.name.first
 				td= user.mes
-				td= user.expire
+				td= new Date(user.expire).getDate() + '/' + new Date(user.expire).getFullYear()
+		- else
+			tr: td(colspan=3, class='no-data')
+					em No users found!
 
-	p
-		a(href="/user/add") Create a new user
+
+	p: a(href="/user/add") Create a new user

@@ -6,8 +6,12 @@ block content
 			input(type="text", name="first", value=fields.first[0])
 		label(class=fields.last[1]) Last Name:
 			input(type="text", name="last", value=fields.last[0])
+		label(class=fields.email[1]) Email:
+			input(type="email", name="email", value=fields.email[0])
 		label(class=fields.mes[1]) MES #:
 			input(type="text", name="mes", value=fields.mes[0])
 		label(class=fields.expiration[1]) Expiration:
 			input(type="date", name="expiration", placeholder="YYYY-MM", value=fields.expiration[0])
+		label(class=fields.trial[1]) Trial Member:
+			input(type="checkbox", name="trial", value=fields.trial[0])
 		input(type="submit", value="Submit", class="submit")
