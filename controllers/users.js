@@ -2,6 +2,9 @@ var config = require('./config.js'),
 	mongoose = require('mongoose'),
 	User = mongoose.model('User')
 
+/**
+ * Lists users.
+ */
 exports.userList = function(req, res) {
 	var now = new Date().getTime()
 	

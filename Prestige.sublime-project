@@ -5,6 +5,11 @@
 			"path": "/media/data/Websites/prestige",
 			"folder_exclude_patterns": ["node_modules"],
 			"file_exclude_patterns": ["*.sublime-workspace"]
+		},
+		{
+			"path": "/Users/egregor/Dev/workspace/prestige",
+			"folder_exclude_patterns": ["node_modules"],
+			"file_exclude_patterns": ["*.sublime-workspace"]
 		}
 	]
 }

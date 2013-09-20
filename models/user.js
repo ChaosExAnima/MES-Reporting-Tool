@@ -18,11 +18,21 @@ var UserSchema = new Schema({
   mes: String,
   expire: Number,
   trial: { type: Boolean, default: false },
-  mc: Number,
-  g: Number,
-  r: Number,
-  n: Number,
-  gt: Number,
+  position: {
+    name: String,
+    type: String,
+    attained: Number,
+    ends: Number,
+  },
+  prestige: {
+    mc: Number,
+    g: Number,
+    r: Number,
+    n: Number,
+    gt: Number,    
+  }
+  standards: Array,
+  disciplinaryactions: Array
 })
 
 mongoose.model('User', UserSchema)

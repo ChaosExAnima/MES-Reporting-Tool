@@ -1,0 +1,12 @@
+extends ../layout
+
+block content
+	- if(reports.length)
+		ul
+		- each report, i in reports
+			li: a(href="/report/"+report.year+"/"+report.month)= report.name
+	- else
+		p.no-data No reports found!
+
+
+	p: a(href="/report/add", class="submit") Create New

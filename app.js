@@ -63,13 +63,14 @@ function setupRoutes() {
 	var form = require('express-form'),
 		field = form.field,
 		statics = require('./controllers/statics.js'),
-		users = require('./controllers/users.js')
+		users = require('./controllers/users.js'),
+		reports = require('./controllers/reports.js');
 
 	log('Configuring routes.');
 
-	form.configure({ autoTrim: true })
+	form.configure({ autoTrim: true });
 
-	app.get('/', statics.home)
+	app.get('/', statics.home);
 
 	// User Pages
 	app.get('/user/:id([A-Z]{2}\\d+)', users.userDetail)
@@ -84,4 +85,7 @@ function setupRoutes() {
 		users.userSubmit
 	)
 	app.get('/user', users.userList)
+
+	// Reports pages
+	app = reports.route(app, '/report');
 }

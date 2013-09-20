@@ -57,14 +57,9 @@ td
     text-align right
     padding-right .5em
 
-  &.no-data
-    text-align center
-    font-style oblique
-    color lighten(text-color, 20%)
-
   &:first-child
     padding-left .5em
-
+    text-align left
 
 th
   color main-color
@@ -72,6 +67,10 @@ th
 
 td
   padding .5em 0
+
+ul.list
+  li:nth-child(odd)
+    background-color darken(background-color, 10%)
 
 label 
   display block
@@ -125,3 +124,8 @@ label
 
 .error
   color darken(main-color, 30%)
+
+.no-data
+  text-align center
+  font-style oblique
+  color lighten(text-color, 20%)
