@@ -13,5 +13,6 @@ block content
 		label(class=fields.expiration[1]) Expiration:
 			input(type="date", name="expiration", placeholder="YYYY-MM", value=fields.expiration[0])
 		label(class=fields.trial[1]) Trial Member:
-			input(type="checkbox", name="trial", value=fields.trial[0])
+			input(type="checkbox", name="trial", value="yes")
 		input(type="submit", value="Submit", class="submit")
+		a(class="button", href="/user") Cancel

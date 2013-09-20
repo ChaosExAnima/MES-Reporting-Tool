@@ -1,0 +1,127 @@
+/*
+ * Typographic settings
+ */
+
+*
+  box-sizing border-box
+
+body
+  font-family 'Source Sans Pro', sans-serif
+  background-color background-color
+  color text-color
+  font-size 16px
+
+h1
+  font-size 2em
+
+h2
+  font-size 1.5em
+  margin-bottom .5em
+  color main-color
+
+h3
+  color lighten(text-color, 40%)
+  font-size 1.2em
+  margin 1em 0 .5em
+
+p
+  line-height 1.8
+
+a
+  text-decoration none
+  color text-color
+
+  &:hover
+    text-decoration underline
+
+em
+  font-style oblique
+
+strong
+  font-weight bold
+
+table
+  width 100%
+  border-collapse collapse
+
+tr
+  padding .5em 0
+
+tbody
+  tr:nth-child(odd)
+      background-color darken(background-color, 10%)
+
+th
+td
+  &:last-child
+    text-align right
+    padding-right .5em
+
+  &.no-data
+    text-align center
+    font-style oblique
+    color lighten(text-color, 20%)
+
+  &:first-child
+    padding-left .5em
+
+
+th
+  color main-color
+  padding-bottom .5em
+
+td
+  padding .5em 0
+
+label 
+  display block
+  margin 1em 0
+  width 20em
+  height 2em
+  line-height 2em
+
+  input
+    float right
+    border-radius .5em
+    border 1px solid darken(background-color, 30%)
+    padding .25em
+    height 2em
+    width 15em
+
+    &:focus
+      border-color main-color
+
+    &[type='checkbox']
+      height 1em
+      width 1em
+      margin 0.5em
+
+.button
+  background main-color
+  border 1px solid darken(main-color, 30%)
+  padding .5em 1em
+  color #fff
+  border-radius .5em
+  cursor pointer
+  display inline-block
+  font-size 1em
+  line-height 1
+  margin .2em
+  -webkit-appearance none
+
+  &:hover
+    background darken(main-color, 30%)
+    border-color darken(main-color, 50%)
+    text-decoration none
+
+.submit
+  @extend .button
+  background confirm-color
+  border-color darken(confirm-color, 50%)
+
+  &:hover
+    background darken(confirm-color, 30%)
+    border-color darken(confirm-color, 50%)
+
+.error
+  color darken(main-color, 30%)

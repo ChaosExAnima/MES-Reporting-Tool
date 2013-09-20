@@ -5,9 +5,33 @@ var config = require('./config.js'),
 exports.userList = function(req, res) {
 	var now = new Date().getTime()
 	
-	User.find({ trial: false, expire: { $gt: now } }, function(err, docs) {
-		res.render('user', {title: 'Users', nav: config.nav, cururl: '/user', users: docs})
+	User.find(function(err, users) {
+		for (var i = 0; i < users.length; i++) {
+			users[i] = users[i].toObject()
+			users[i].expire = new Date(users[i].expire)
+			users[i].is_expired = users[i].expire.getTime() <= new Date().getTime()
+		};
+		res.render('user_list', {title: 'Users', nav: config.nav, cururl: '/user', users: users})
 	});	
+}
+
+/**
+ * Show user detail
+ */
+exports.userDetail = function(req, res) {
+	var id = req.params.id
+
+	if(id) {
+		User.findOne({ mes: id }, function(err, doc) {
+			var user = doc.toObject(),
+				title = 'User Detail: ' + user.name.last + ', ' + user.name.first
+			user.expire = new Date(user.expire)
+			user.is_expired = user.expire.getTime() <= new Date().getTime()
+			res.render('user_detail', { title: title, nav: config.nav, cururl: '/user', user: user })
+		});
+	} else {
+		res.redirect('/user')
+	}
 }
 
 /**
@@ -49,7 +73,7 @@ exports.userSubmit = function(req, res) {
 	if(!req.form.isValid) {
 		exports.userAdd(req, res)
 	} else {
-		var trial = req.body.trial == 'on' ? true : false;
+		var trial = (req.body.trial == 'yes' ? true : false)
 
 		// Add validated user to DB.
 		var user = new User({
@@ -72,23 +96,4 @@ exports.userSubmit = function(req, res) {
 		// Redirect back to user list.
 		res.redirect('/user')
 	}
-}
-
-/**
- * Show user detail
- */
-exports.userDetail = function(req, res) {
-	var id = req.params.id
-
-	if(id) {
-		User.findOne({ mes: id }, function(err, doc) {
-			var user = doc.toObject(),
-				title = 'User Detail: ' + user.name.last + ', ' + user.name.first
-			user.expire = new Date(user.expire)
-			res.render('user_detail', { title: title, nav: config.nav, cururl: '/user', user: user })
-		});
-	} else {
-		res.redirect('/user')
-	}
-	//res.render('user_detail', {title: 'User Detail', nav: config.nav, cururl: '/user', user: {}})
 }

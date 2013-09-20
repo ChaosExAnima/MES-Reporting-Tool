@@ -106,6 +106,9 @@ a img {
 /*
  * Size variables
  */
+/*
+ * Main Imports
+ */
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -117,9 +120,6 @@ body {
   color: #444;
   font-size: 16px;
 }
-/*
- * Typographic settings
- */
 h1 {
   font-size: 2em;
 }
@@ -128,12 +128,26 @@ h2 {
   margin-bottom: 0.5em;
   color: #fa6464;
 }
+h3 {
+  color: #8f8f8f;
+  font-size: 1.2em;
+  margin: 1em 0 0.5em;
+}
+p {
+  line-height: 1.8;
+}
 a {
   text-decoration: none;
   color: #444;
 }
 a:hover {
   text-decoration: underline;
+}
+em {
+  font-style: oblique;
+}
+strong {
+  font-weight: bold;
 }
 table {
   width: 100%;
@@ -148,6 +162,7 @@ tbody tr:nth-child(odd) {
 th:last-child,
 td:last-child {
   text-align: right;
+  padding-right: 0.5em;
 }
 th.no-data,
 td.no-data {
@@ -155,18 +170,16 @@ td.no-data {
   font-style: oblique;
   color: #696969;
 }
+th:first-child,
+td:first-child {
+  padding-left: 0.5em;
+}
 th {
   color: #fa6464;
   padding-bottom: 0.5em;
 }
 td {
   padding: 0.5em 0;
-}
-td:first-child {
-  padding-left: 0.5em;
-}
-td:last-child {
-  padding-right: 0.5em;
 }
 label {
   display: block;
@@ -196,12 +209,22 @@ label input[type='checkbox'] {
 .submit {
   background: #fa6464;
   border: 1px solid #ed0808;
-  padding: 0.5em;
+  padding: 0.5em 1em;
   color: #fff;
   -webkit-border-radius: 0.5em;
   border-radius: 0.5em;
   cursor: pointer;
-  width: 6em;
+  display: inline-block;
+  font-size: 1em;
+  line-height: 1;
+  margin: 0.2em;
+  -webkit-appearance: none;
+}
+.button:hover,
+.submit:hover {
+  background: #ed0808;
+  border-color: #aa0505;
+  text-decoration: none;
 }
 .submit {
   background: #46c846;
@@ -209,13 +232,11 @@ label input[type='checkbox'] {
 }
 .submit:hover {
   background: #2b922b;
+  border-color: #1f681f;
 }
 .error {
   color: #ed0808;
 }
-/*
- * Structure
- */
 header {
   padding: 2em 1em 1em;
   color: #fff;
@@ -248,47 +269,6 @@ header li .current {
   margin: 3em auto;
   overflow: hidden;
 }
-.main-content {
-  float: left;
-  width: 60%;
-}
-.main-content p {
-  margin-bottom: 2em;
-}
-.sidebar {
-  float: left;
-  width: 40%;
-}
-.sidebar .widget {
-/*
-     * Note the lack of vendor
-     * prefixes here. Nib will
-     * add them for us
-     */
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-  border: 1px solid #ccc;
-  margin-left: 3em;
-  background-color: #fafaf0;
-  -webkit-box-shadow: inset 0px 0px 0px 3px rgba(255,255,255,0.8), 0px 3px 0px -2px rgba(0,0,0,0.1);
-  box-shadow: inset 0px 0px 0px 3px rgba(255,255,255,0.8), 0px 3px 0px -2px rgba(0,0,0,0.1);
-}
-.sidebar .widget h1 {
-  font-family: 'Quicksand';
-  margin: 13px 10px 4px;
-  padding-bottom: 10px;
-  border-bottom: 1px dotted #ddd;
-  -webkit-border-radius: 2px 2px 0px 0px;
-  border-radius: 2px 2px 0px 0px;
-  margin-bottom: 10px;
-}
-.sidebar .widget p {
-  padding: 0px 1em;
-  margin-bottom: 1em;
-}
-p {
-  line-height: 1.8;
-}
 footer {
   width: 50em;
   margin: 3em auto;
@@ -297,4 +277,7 @@ footer {
 }
 footer p {
   font-size: 0.75em;
+}
+.user-prestige .num {
+  text-align: right;
 }
