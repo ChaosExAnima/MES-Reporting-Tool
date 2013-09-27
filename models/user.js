@@ -30,7 +30,7 @@ var UserSchema = new Schema({
     r: Number,
     n: Number,
     gt: Number,    
-  }
+  },
   standards: Array,
   disciplinaryactions: Array
 })
