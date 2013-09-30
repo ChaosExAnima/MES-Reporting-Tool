@@ -10,13 +10,13 @@ var mongoose = require('mongoose'),
  */
 
 var PrestigeSchema = new Schema({
-	user: String,
+	user: { type: String, index: true },
  	date: Number,
  	description: String,
  	category: String,
  	g: Number,
  	r: Number,
  	n: Number
-})
+});
 
 mongoose.model('Prestige', PrestigeSchema)

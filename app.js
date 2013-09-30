@@ -73,18 +73,7 @@ function setupRoutes() {
 	app.get('/', statics.home);
 
 	// User Pages
-	app.get('/user/:id([A-Z]{2}\\d+)', users.userDetail)
-	app.get('/user/add', users.userAdd)
-	app.post('/user/add', 
-		form(
-			field('first').required().is(/^[a-z\.-\s]+$/i),
-			field('last').required().is(/^[a-z\.-\s]+$/i),
-			field('mes').required().is(/^[a-z]{2}\d{10}$/i).toUpper(),
-			field('expiration').required().isDate()
-		), 
-		users.userSubmit
-	)
-	app.get('/user', users.userList)
+	app = users.route(app, '/user');
 
 	// Reports pages
 	app = reports.route(app, '/report');

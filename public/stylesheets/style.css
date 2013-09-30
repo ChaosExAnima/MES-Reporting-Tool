@@ -203,6 +203,12 @@ label input[type='checkbox'] {
   width: 1em;
   margin: 0.5em;
 }
+fieldset {
+  border: 1px solid #d5d582;
+  padding: 1em;
+  margin: 1em 0;
+  background: #f4f4de;
+}
 .button,
 .submit {
   background: #fa6464;
@@ -283,4 +289,13 @@ footer p {
 }
 .user-prestige .num {
   text-align: right;
+}
+.user-standards {
+  overflow: auto;
+}
+.user-standards label {
+  width: 33%;
+  padding-right: 2em;
+  float: left;
+  margin: 0.5em 0;
 }

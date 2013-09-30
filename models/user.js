@@ -15,15 +15,10 @@ var UserSchema = new Schema({
     last: String
   },
   email: String,
-  mes: String,
+  mes: { type: String, index: true },
   expire: Number,
   trial: { type: Boolean, default: false },
-  position: {
-    name: String,
-    type: String,
-    attained: Number,
-    ends: Number,
-  },
+  position: Array,
   prestige: {
     mc: Number,
     g: Number,

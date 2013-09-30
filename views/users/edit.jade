@@ -1,0 +1,37 @@
+extends ../layout
+
+block content
+	form(action="/user/edit/"+mes, method="post")
+		label(class=fields.first[1]) First Name:
+			input(type="text", name="first", value=fields.first[0])
+		label(class=fields.last[1]) Last Name:
+			input(type="text", name="last", value=fields.last[0])
+		label(class=fields.email[1]) Email:
+			input(type="email", name="email", value=fields.email[0])
+		label(class=fields.mes[1]) MES #:
+			input(type="text", name="mes", value=fields.mes[0])
+		label(class=fields.expiration[1]) Expiration:
+			input(type="date", name="expiration", placeholder="YYYY-MM-DD", value=fields.expiration[0])
+		label(class=fields.trial[1]) Trial Member:
+			input(type="checkbox", name="trial", value="yes", checked=(fields.trial[0]===true ? "checked" : undefined))
+
+		fieldset 
+			legend Prestige
+			label(class=fields.mc[1]) MC Class:
+				input(type="number", name="mc", value=fields.mc[0])
+			label(class=fields.g[1]) General:
+				input(type="number", name="g", value=fields.g[0])
+			label(class=fields.r[1]) Regional:
+				input(type="number", name="r", value=fields.r[0])
+			label(class=fields.n[1]) National:
+				input(type="number", name="n", value=fields.n[0])
+
+		fieldset(class="user-standards")
+			legend Standards
+			each val, key in fields.standards
+				label(class="standard")= val[1]+":"
+					input(type="checkbox", name="standard[]", value=key, checked=(val[0]===true ? "checked" : undefined))
+
+
+		input(type="submit", value="Submit", class="submit")
+		a(class="button", href="/user/"+mes) Cancel

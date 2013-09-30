@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block content
 	table
@@ -11,11 +11,12 @@ block content
 		- each user, i in users
 			tr
 				td: a(href="/user/"+user.mes)= user.name.last + ', ' + user.name.first
-				td= user.mes
-				td= new Date(user.expire).getDate() + '/' + new Date(user.expire).getFullYear()
+				td!= user.mes + (user.trial === true ? ' <em>(TRIAL)</em>' : '')
+				- var expired = (user.is_expired === true ? 'error' : '')
+				td(class=expired)= user.expire.getDate() + '/' + user.expire.getFullYear()
 		- else
 			tr: td(colspan=3, class='no-data')
 					em No users found!
 
 
-	p: a(href="/user/add") Create a new user
+	p: a(href="/user/add", class="submit") Create New
