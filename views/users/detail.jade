@@ -10,10 +10,10 @@ block content
 	p= 'Totals: ' + user.prestige.g + 'G, ' + user.prestige.r + 'R, ' + user.prestige.n + 'N, ' + user.prestige.gt + 'GT'
 	if user.is_expired
 		p.error Expired 
-			span(class='date')= user.expire.getMonth() + '/' + user.expire.getDate() + '/' + user.expire.getFullYear()
+			span(class='date')= user.expire
 	else
 		p Expires 
-			span(class='date')= user.expire.getMonth() + '/' + user.expire.getDate() + '/' + user.expire.getFullYear()
+			span(class='date')= user.expire
 
 	h3 Standards
 	if user.standards.length
@@ -46,7 +46,7 @@ block content
 			tbody
 			each award in awards
 				tr
-					td= award.date.getMonth() + '/' + award.date.getDate() + '/' + award.date.getFullYear() 
+					td= award.date
 					td= award.description
 					td= award.category
 					td.num= award.g

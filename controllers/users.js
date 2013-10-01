@@ -1,9 +1,10 @@
 var config = require('./config.js'),
 	util = require('util'),
-	log = function(str) { util.log( util.inspect(str) ); } 
+	log = function(str) { util.log( util.inspect(str) ); },
+	dateformat = require('dateformat'),
 	mongoose = require('mongoose'),
 	User = mongoose.model('User'),
-	Prestige = mongoose.model('Prestige')
+	Prestige = mongoose.model('Prestige');
 
 /**
  * Routing
@@ -47,15 +48,22 @@ exports.route = function(app, path) {
  * Lists users.
  */
 exports.index = function(req, res) {
-	var now = new Date().getTime()
+	var now = new Date().getTime(),
+		sort = { 'name.last': 1 };
+
+	if(req.query.sort == 'date') {
+		sort = { 'expire': 1 };
+	} else if(req.query.sort == 'mc') {
+		sort = { 'prestige.mc': -1 };
+	}
 	
-	User.find({}, null, { sort: { 'name.last': 1 }}, function(err, users) {
+	User.find({}, null, { sort: sort }, function(err, users) {
 		for (var i = 0; i < users.length; i++) {
-			users[i] = users[i].toObject()
-			users[i].expire = new Date(users[i].expire)
-			users[i].is_expired = users[i].expire.getTime() <= new Date().getTime()
+			users[i] = users[i].toObject();
+			users[i].is_expired = users[i].expire <= new Date().getTime();
+			users[i].expire = dateformat(users[i].expire, "yyyy-mm-dd");
 		};
-		res.render('users/index', {title: 'Users', nav: config.nav, cururl: '/user', users: users})
+		res.render('users/index', {title: 'Users', nav: config.nav, cururl: '/user', users: users, sort: Object.keys(sort)[0] })
 	});	
 }
 
@@ -68,15 +76,15 @@ exports.detail = function(req, res) {
 	if(id) {
 		User.findOne({ mes: id }, function(err, doc) {
 			var user = doc.toObject(),
-				title = 'User Detail: ' + user.name.last + ', ' + user.name.first
-			user.expire = new Date(user.expire)
-			user.is_expired = user.expire.getTime() <= new Date().getTime()
+				title = 'User Detail: ' + user.name.last + ', ' + user.name.first;
+			user.is_expired = user.expire <= new Date().getTime();
+			user.expire = dateformat(user.expire, "yyyy-mm-dd");
 
 			// Load awards here.
 			Prestige.find({ user: id }, null, { sort: { date: 1 } }, function(err, awards) {
 				for (var i = 0; i < awards.length; i++) {
-					awards[i] = awards[i].toObject()
-					awards[i].date = new Date(awards[i].date)
+					awards[i] = awards[i].toObject();
+					awards[i].date = dateformat(awards[i].date, "yyyy-mm-dd");
 				};
 
 				res.render('users/detail', { title: title, nav: config.nav, cururl: '/user', user: user, awards: awards });
@@ -137,15 +145,12 @@ exports.edit = function(req, res) {
 	}
 
 	User.findOne({ mes: id }, function(err, user) {
-		var expire = new Date(user.expire),
-			email = user.email != 'false' ? user.email : '';
-
 		var fields = {
 			first: [user.name.first, false],
 			last: [user.name.last, false],
-			email: [email, false],
+			email: [user.email, false],
 			mes: [user.mes, false],
-			expiration: [expire.getFullYear() + '-' + (expire.getMonth()+1) + '-' + expire.getDate(), false],
+			expiration: [dateformat(user.expire, 'yyyy-mm-dd'), false],
 			trial: [user.trial, false],
 			mc: [user.prestige.mc, false],
 			g: [user.prestige.g, false],
@@ -230,6 +235,8 @@ exports.submit = function(req, res) {
 	} else {
 		var form = req.form;
 
+		log(form.expiration);
+
 		// Add/update user.
 		var user = {
 			name: {
@@ -238,7 +245,7 @@ exports.submit = function(req, res) {
 			},
 			email: form.email,
 			mes: form.mes,
-			expire: new Date(form.expiration).getTime(),
+			expire: Date.parse(form.expiration) + 18000000, // Add a day due to stupid time differences.
 			trial: form.trial,
 			prestige: {
 			    mc: Math.max( parseInt(form.mc), 1),

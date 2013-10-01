@@ -28,6 +28,6 @@ var UserSchema = new Schema({
   },
   standards: Array,
   disciplinaryactions: Array
-})
+});
 
 mongoose.model('User', UserSchema)

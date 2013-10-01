@@ -173,6 +173,9 @@ th {
   color: #fa6464;
   padding-bottom: 0.5em;
 }
+th a {
+  color: #fa6464;
+}
 td {
   padding: 0.5em 0;
 }
@@ -298,4 +301,7 @@ footer p {
   padding-right: 2em;
   float: left;
   margin: 0.5em 0;
+}
+.user-index th a.selected {
+  text-decoration: underline;
 }

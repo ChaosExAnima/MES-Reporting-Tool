@@ -1,22 +1,23 @@
 extends ../layout
 
 block content
-	table
+	table(class="user-index")
 		thead
 			tr
-				th Name
+				th: a(href="/user/?sort=name", class=(sort==='name.last' ? 'selected' : '')) Name
 				th MES Number
-				th Expiration Date
+				th: a(href="/user/?sort=mc", class=(sort==='prestige.mc' ? 'selected' : '')) MC Class
+				th: a(href="/user/?sort=date", class=(sort==='expire' ? 'selected' : '')) Expiration Date
 		- if(users.length)
 		- each user, i in users
 			tr
 				td: a(href="/user/"+user.mes)= user.name.last + ', ' + user.name.first
 				td!= user.mes + (user.trial === true ? ' <em>(TRIAL)</em>' : '')
 				- var expired = (user.is_expired === true ? 'error' : '')
-				td(class=expired)= user.expire.getDate() + '/' + user.expire.getFullYear()
+				td= user.prestige.mc
+				td(class=expired)= user.expire
 		- else
 			tr: td(colspan=3, class='no-data')
 					em No users found!
-
 
 	p: a(href="/user/add", class="submit") Create New
