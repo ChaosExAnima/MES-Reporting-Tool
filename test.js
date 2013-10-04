@@ -183,7 +183,7 @@ function getStandards(string) {
 		} else if(lines[i].indexOf('Total Prestige') != -1) {
 			break;
 		} else if(isInTests && lines[i].length != 0) {
-			tests.push(lines[i]);
+			tests.push({ name: lines[i], date: 0 });
 		}
 	}
 

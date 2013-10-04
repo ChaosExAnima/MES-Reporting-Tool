@@ -15,11 +15,14 @@ block content
 		p Expires 
 			span(class='date')= user.expire
 
+	if user.positions.length
+		p= 'Positions: ' + user.positions_formatted.join(', ')
+
 	h3 Standards
 	if user.standards.length
 		ul
 			each standard in user.standards
-				li= standard
+				li= standard.name
 	else
 		p No Standards completed.
 

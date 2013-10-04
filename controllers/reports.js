@@ -1,6 +1,11 @@
 var config = require('./config.js'),
-	mongoose = require('mongoose');
-	//Report = mongoose.model('Report')
+	util = require('util'),
+	log = function(str) { util.log( util.inspect(str) ); },
+	mongoose = require('mongoose'),
+	dateformat = require('dateformat'),
+	Report = mongoose.model('Report')
+	User = mongoose.model('User'),
+	Prestige = mongoose.model('Prestige');
 
 /**
  * Lists reports.
@@ -10,13 +15,13 @@ exports.list = function(req, res) {
 	res.render('reports/list', {title: 'Reports', nav: config.nav, cururl: '/reports', reports: []});
 	return;
 
-	User.find({}, function(err, reports) {
+	Report.find({}, function(err, reports) {
 		for (var i = 0; i < reports.length; i++) {
-			reports[i] = reports[i].toObject()
-			reports[i].reports = new Date(users[i].expire)
-			users[i].is_expired = users[i].expire.getTime() <= new Date().getTime()
+			reports[i] = reports[i].toObject();
+			reports[i].link = dateformat(reports.date, 'yyyy/mm');
+			reports[i].date = dateformat(reports.date, 'yyyy-mm-dd');
 		};
-		res.render('user_list', {title: 'Users', nav: config.nav, cururl: '/user', users: users})
+		res.render('user_list', {title: 'Users', nav: config.nav, cururl: '/user', reports: reports})
 	});	
 }
 

@@ -3,15 +3,16 @@
  */
 
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema
+    Schema = mongoose.Schema,
+    ObjectId = mongoose.Schema.Types.ObjectId;
 
 /**
  * Prestige Schema
  */
 
 var PrestigeSchema = new Schema({
-	user: { type: String, index: true },
- 	date: Number,
+	user: { type: ObjectId, index: true },
+ 	date: { type: Number, index: true },
  	description: String,
  	category: String,
  	g: Number,

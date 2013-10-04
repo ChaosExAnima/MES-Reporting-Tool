@@ -79,9 +79,13 @@ exports.detail = function(req, res) {
 				title = 'User Detail: ' + user.name.last + ', ' + user.name.first;
 			user.is_expired = user.expire <= new Date().getTime();
 			user.expire = dateformat(user.expire, "yyyy-mm-dd");
-
+			user.positions_formatted = [];
+			user.positions.forEach(function(position) {
+				user.positions_formatted.push( (position.ends !== null) ? position.name + dateformat(position.ends, " (yyyy-mm-dd)") : position.name );
+			});
+ 
 			// Load awards here.
-			Prestige.find({ user: id }, null, { sort: { date: 1 } }, function(err, awards) {
+			Prestige.find({ user: doc._id }, null, { sort: { date: 1 } }, function(err, awards) {
 				for (var i = 0; i < awards.length; i++) {
 					awards[i] = awards[i].toObject();
 					awards[i].date = dateformat(awards[i].date, "yyyy-mm-dd");

@@ -3,14 +3,15 @@
  */
 
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema
+    Schema = mongoose.Schema,
+    ObjectId = mongoose.Schema.Types.ObjectId;
 
 /**
  * Prestige Schema
  */
 
 var ReportSchema = new Schema({
-	date: Number,
+	date: { type: Number, index: true },
 	counts: {
 		members: Number,
 		trial: Number,
@@ -18,12 +19,16 @@ var ReportSchema = new Schema({
 		total: Number
 	},
 	staff: {
-		dc: Object,
-		adcs: Array,
-		dst: Object,
-		adsts: Array,	
+		dc: ObjectId,
+		adcs: [ObjectId],
+		dst: ObjectId,
+		adsts: [ObjectId],	
+		vsts: [ObjectId]
 	},
-	upcoming: Array,
+	upcoming: [{
+		name: String,
+		date: Number
+	}],
 	finance: {
 		start: Number,
 		end: Number,
@@ -40,23 +45,33 @@ var ReportSchema = new Schema({
 			fees: Number,
 		}
 	},
-	elections: Array,
+	elections: [{
+		position: String,
+		stage: String,
+		date: Number
+	}],
 	comments: {
-		problems: String,
-		suggestions: String,
-		comments: String
+		problems: [String],
+		suggestions: [String],
+		comments: [String]
 	},
 	members: {
-		fresh: Array,
-		transferred: Array,
-		mc9: Array,
-		prestige: Array,
-		regional: Array,
-		mcbump: Array,
+		fresh: [ObjectId],
+		transferred: [ObjectId],
+		mc9: [ObjectId],
+		prestige: [ObjectId],
+		regional: [ObjectId],
+		mcbump: [ObjectId],
 	},
-	memberlist: Array,
-	nominations: Array,
-	das: Array
+	memberlist: [{
+		user: ObjectId,
+		awards: [ObjectId]
+	}],
+	nominations: [ObjectId],
+	das: [{
+		user: ObjectId,
+		text: String
+	}]
 })
 
 mongoose.model('Report', ReportSchema)
