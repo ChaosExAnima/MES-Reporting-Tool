@@ -209,8 +209,29 @@ label input[type='checkbox'] {
 fieldset {
   border: 1px solid #d5d582;
   padding: 1em;
-  margin: 1em 0;
   background: #f4f4de;
+  margin: 1em 0;
+  overflow: hidden;
+  -webkit-transition: max-height 0.2s;
+  -moz-transition: max-height 0.2s;
+  -o-transition: max-height 0.2s;
+  -ms-transition: max-height 0.2s;
+  transition: max-height 0.2s;
+  max-height: 1000px;
+}
+fieldset.close {
+  max-height: 10px !important;
+}
+fieldset legend {
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+fieldset legend:hover {
+  text-decoration: underline;
 }
 .button,
 .submit {
@@ -292,9 +313,6 @@ footer p {
 }
 .user-prestige .num {
   text-align: right;
-}
-.user-standards {
-  overflow: auto;
 }
 .user-standards label {
   width: 33%;

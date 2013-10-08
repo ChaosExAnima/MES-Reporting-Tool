@@ -1,0 +1,55 @@
+{
+	"settings" : {
+		"domain" : "NY-004-D",
+		"location" : "New York, NY",
+		"region" : "North East",
+		"dc" : "US2012030038",
+		"email" : "dc@nyccamarilla.org",
+		"website" : "http://nyccamarilla.org"
+	},
+	"nav" : {
+		"Home" : "/",
+		"Users" : "/user",
+		"Reports" : "/report"
+	},
+	"standards" : [
+		"Membership",
+		"Prestige",
+		"Storyteller",
+		"Coordinator",
+		"WoD",
+		"Lost",
+		"Requiem",
+		"Awakening",
+		"Forsaken",
+		"Masquerade",
+		"Membership Website",
+		"Membership Contact",
+		"Membership Chapter 1",
+		"Membership Chapter 2",
+		"Membership Chapter 3",
+		"Membership Chapter 4",
+		"Membership Chapter 5",
+		"Membership Chapter 6",
+		"Membership Chapter 7",
+		"Membership Chapter 8"
+	],
+	"categories" : [
+		{
+			"name" : "Administration",
+			"cap" : 80
+		},
+		{
+			"name" : "Non-Administrative Game Support",
+			"cap" : 50
+		},
+		{
+			"name" : "Social/Non-Game Support",
+			"cap" : 50
+		},
+		{
+			"name" : "Miscellaneous",
+			"cap" : 0
+		}
+	]
+}

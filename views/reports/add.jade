@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+	form(action="/report/add", method="post")
+		label(class=fields.date[1]) Date:
+			input(type="text", name="date", value=fields.date[0], placeholder="YYYY-MM")
+
+		input(type="submit", value="Submit", class="submit")
+		a(class="button", href="/report") Cancel

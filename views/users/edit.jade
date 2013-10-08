@@ -15,7 +15,7 @@ block content
 		label(class=fields.trial[1]) Trial Member:
 			input(type="checkbox", name="trial", value="yes", checked=(fields.trial[0]===true ? "checked" : undefined))
 
-		fieldset 
+		fieldset
 			legend Prestige
 			label(class=fields.mc[1]) MC Class:
 				input(type="number", name="mc", value=fields.mc[0])
@@ -32,6 +32,8 @@ block content
 				label(class="standard")= val[1]+":"
 					input(type="checkbox", name="standard[]", value=key, checked=(val[0]===true ? "checked" : undefined))
 
+		fieldset
+			legend Disciplinary Actions
 
 		input(type="submit", value="Submit", class="submit")
 		a(class="button", href="/user/"+mes) Cancel

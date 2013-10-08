@@ -1,5 +1,4 @@
-var config = require('./config.js'),
-	util = require('util'),
+var util = require('util'),
 	log = function(str) { util.log( util.inspect(str) ); },
 	mongoose = require('mongoose'),
 	dateformat = require('dateformat'),
@@ -21,21 +20,55 @@ exports.list = function(req, res) {
 			reports[i].link = dateformat(reports.date, 'yyyy/mm');
 			reports[i].date = dateformat(reports.date, 'yyyy-mm-dd');
 		};
-		res.render('user_list', {title: 'Users', nav: config.nav, cururl: '/user', reports: reports})
+		res.render('list', {title: 'Users', nav: config.nav, cururl: '/user', reports: reports})
 	});	
 }
 
 
+/**
+ * Shows report detail.
+ */
 exports.detail = function(req, res) {
-
-}
-
-
-exports.add = function(req, res) {
 	
 }
 
 
+/**
+ * Adds a report.
+ */
+exports.add = function(req, res) {
+	var date = new Date();
+	date.setMonth( date.getMonth() === 0 ? 11 : date.getMonth() -1 );
+
+	var fields = {
+			date: [dateformat(date, 'yyyy-mm'), false],
+		},
+		form = req.form,
+		err = function(field) {
+			return form.getErrors(field).length ? 'error' : '';
+		};
+
+	if(typeof form != 'undefined') {
+		fields = {
+
+		};
+	}
+
+	res.render('reports/add', {title: 'New Report', nav: config.nav, cururl: '/reports', fields: fields});
+}
+
+
+/**
+ * Edits a report.
+ */
+exports.edit = function(req, res) {
+
+}
+
+
+/**
+ * Submits a report.
+ */
 exports.submit = function(req, res) {
 	
 }
@@ -59,7 +92,7 @@ exports.route = function(app, path) {
 
 	app.get(path+'/:id([0-9]{4}/[0-9]{2})/?$', this.detail)
 	app.get(path+'/add', this.add)
-	app.post(path+'/add', validation, this.submit)
+	app.post(path+'/add/done', validation, this.submit)
 	app.get(path, this.list)
 
 	return app;

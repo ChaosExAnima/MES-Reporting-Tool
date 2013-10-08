@@ -1,7 +1,4 @@
-var config = require('./config.js'),
-	util = require('util'),
-	log = function(str) { util.log( util.inspect(str) ); },
-	dateformat = require('dateformat'),
+var dateformat = require('dateformat'),
 	mongoose = require('mongoose'),
 	User = mongoose.model('User'),
 	Prestige = mongoose.model('Prestige');
@@ -164,13 +161,11 @@ exports.edit = function(req, res) {
 		}
 
 		config.standards.forEach(function(item) {
-			var slug = item.replace(/(\W)/g, "-").toLowerCase();
 			fields.standards[item] = [false, item];
 		});
 
 		user.standards.forEach(function(item) {
-			var slug = item.replace(/(\W)/g, "-").toLowerCase();
-			fields.standards[item][0] = true;
+			fields.standards[item.name][0] = true;
 		});
 
 		var form = req.form,
@@ -201,6 +196,10 @@ exports.edit = function(req, res) {
 			form.standard.forEach(function(item) {
 				fields.standards[item][0] = true;
 			});
+		}
+
+		if(fields.email[0] === 'false') {
+			fields.email[0] = '';
 		}
 
 		res.render('users/edit', {title: 'Edit User '+user.name.last+', '+user.name.first, nav: config.nav, cururl: '/user', fields: fields, mes: user.mes})

@@ -101,8 +101,23 @@ label
 fieldset
   border 1px solid darken(background-color, 30%)
   padding 1em
-  margin 1em 0
   background darken(background-color, 5%)
+  margin 1em 0
+  overflow hidden
+  transition max-height 0.2s
+  max-height 1000px
+
+  &.close
+    max-height 10px !important
+
+  legend
+    text-decoration none
+    cursor pointer
+    user-select none
+
+    &:hover
+      text-decoration underline
+
 
 .button
   background main-color

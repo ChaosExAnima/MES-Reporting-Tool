@@ -1,11 +1,14 @@
 var express = require('express'),
-	app = express(),
 	mongoose = require('mongoose'),
 	util = require('util');
 
+// Sets globals.
+app = express();
+config = require('./config.json');
+log = function(str) { util.log( util.inspect(str) ); };
+
 // Sets up logger.
 app.use(express.logger('dev'));
-var log = util.log;
 
 log('Initializing middleware.');
 
@@ -58,18 +61,14 @@ db.once('open', function callback () {
 	// Start app
 	app.listen(3000);
 	log('Starting up on port 3000.');
-})
+});
 
 function setupRoutes() {
-	var form = require('express-form'),
-		field = form.field,
-		statics = require('./controllers/statics.js'),
+	var statics = require('./controllers/statics.js'),
 		users = require('./controllers/users.js'),
 		reports = require('./controllers/reports.js');
 
 	log('Configuring routes.');
-
-	form.configure({ autoTrim: true });
 
 	app.get('/', statics.home);
 
@@ -78,4 +77,10 @@ function setupRoutes() {
 
 	// Reports pages
 	app = reports.route(app, '/report');
+};
+
+function setupConfig() {
+	app.use(express.session({
+
+	}));
 }
