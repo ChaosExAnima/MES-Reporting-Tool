@@ -1,10 +1,34 @@
-var util = require('util'),
-	log = function(str) { util.log( util.inspect(str) ); },
-	mongoose = require('mongoose'),
+var mongoose = require('mongoose'),
 	dateformat = require('dateformat'),
 	Report = mongoose.model('Report')
 	User = mongoose.model('User'),
 	Prestige = mongoose.model('Prestige');
+
+
+/**
+ * Sets up routing for the reports module.
+ * @param  {express} app  The Express app reference.
+ * @param  {string} path The URL base for the reporting module.
+ * @return {express}
+ */
+exports.route = function(app, path) {
+	var form = require('express-form'),
+		field = form.field;
+
+	form.configure({ autoTrim: true });
+
+	var validation = form(
+			field('date').required().isDate()
+		);
+
+	app.get(path+'/:id([0-9]{4}/[0-9]{2})/?$', this.detail)
+	app.get(path+'/add', this.add)
+	app.post(path+'/add/done', validation, this.submit)
+	app.get(path, this.list)
+
+	return app;
+}
+
 
 /**
  * Lists reports.
@@ -37,21 +61,27 @@ exports.detail = function(req, res) {
  * Adds a report.
  */
 exports.add = function(req, res) {
-	var date = new Date();
-	date.setMonth( date.getMonth() === 0 ? 11 : date.getMonth() -1 );
+	
 
-	var fields = {
-			date: [dateformat(date, 'yyyy-mm'), false],
-		},
+	var fields = {},
 		form = req.form,
 		err = function(field) {
 			return form.getErrors(field).length ? 'error' : '';
 		};
 
-	if(typeof form != 'undefined') {
-		fields = {
+	if(typeof form === 'undefined') { // Initial creation.
+		var date = new Date();
+		date.setMonth( date.getMonth() === 0 ? 11 : date.getMonth() -1 );
 
+		
+
+		fields = {
+			date: [dateformat(date, 'yyyy-mm'), false],
 		};
+	} else { // Submitted.
+		fields = {
+			date: [],
+		}
 	}
 
 	res.render('reports/add', {title: 'New Report', nav: config.nav, cururl: '/reports', fields: fields});
@@ -71,29 +101,4 @@ exports.edit = function(req, res) {
  */
 exports.submit = function(req, res) {
 	
-}
-
-
-/**
- * Sets up routing for the reports module.
- * @param  {express} app  The Express app reference.
- * @param  {string} path The URL base for the reporting module.
- * @return {express}
- */
-exports.route = function(app, path) {
-	var form = require('express-form'),
-		field = form.field;
-
-	form.configure({ autoTrim: true });
-
-	var validation = form(
-			field('date').required().isDate()
-		);
-
-	app.get(path+'/:id([0-9]{4}/[0-9]{2})/?$', this.detail)
-	app.get(path+'/add', this.add)
-	app.post(path+'/add/done', validation, this.submit)
-	app.get(path, this.list)
-
-	return app;
 }

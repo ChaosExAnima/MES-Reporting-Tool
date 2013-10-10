@@ -107,11 +107,16 @@ exports.add = function(req, res) {
 		mes: ['', false],
 		expiration: ['', false],
 		trial: ['', false],
-		mc: [user.prestige.mc, false],
-		g: [user.prestige.g, false],
-		r: [user.prestige.r, false],
-		n: [user.prestige.n, false],
-	}
+		mc: [1, false],
+		g: [0, false],
+		r: [0, false],
+		n: [0, false],
+		standards: {}
+	};
+
+	config.standards.forEach(function(item) {
+		fields.standards[item] = [false, item];
+	});
 
 	var form = req.form,
 		err = function(field) {

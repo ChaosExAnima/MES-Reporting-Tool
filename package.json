@@ -13,5 +13,6 @@
 		"mongoose": "3.6.x",
 		"express-form": "0.8.x",
 		"dateformat": "1.0.x"
-	}
+	},
+	"main": "app"
 }

@@ -1,9 +1,29 @@
 extends ../layout
 
 block content
-	form(action="/report/add", method="post")
+	form(action="/report/add", method="post", class="report-add")
 		label(class=fields.date[1]) Date:
 			input(type="text", name="date", value=fields.date[0], placeholder="YYYY-MM")
+
+		fieldset#events
+			legend Events
+			div.template
+				input(type="date", name="event_date[]", placeholder="YYYY-MM-DD").date
+				&nbsp;-&nbsp;
+				input(type="text", name="event_name[]", placeholder="Event")
+				a.edit.icon-edit
+				a.cancel.icon-remove
+			button.submit.icon-plus-sign  Add
+
+		fieldset#projects
+			legend Current Projects
+			div.template
+				input(type="text", name="projects[]", placeholder="Project")
+
+		fieldset#finances
+			legend Finances
+			label Beginning Balance:
+				input(type="text", name="finance_start")
 
 		input(type="submit", value="Submit", class="submit")
 		a(class="button", href="/report") Cancel

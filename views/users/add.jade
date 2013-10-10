@@ -26,5 +26,11 @@ block content
 			label(class=fields.n[1]) National:
 				input(type="number", name="n", value=fields.n[0])
 
+		fieldset(class="user-standards start-closed")
+			legend Standards
+			each val, key in fields.standards
+				label(class="standard")= val[1]+":"
+					input(type="checkbox", name="standard[]", value=key, checked=(val[0]===true ? "checked" : undefined))
+
 		input(type="submit", value="Submit", class="submit")
 		a(class="button", href="/user") Cancel

@@ -78,25 +78,29 @@ ul.list
 label 
   display block
   margin 1em 0
-  width 20em
+  width 50%
   height 2em
-  line-height 2em
+  line-height @height
 
   input
-    float right
-    border-radius .5em
-    border 1px solid darken(background-color, 30%)
-    padding .25em
-    height 2em
+    float right    
     width 15em
 
-    &:focus
-      border-color main-color
+input
+  border-radius .5em
+  border 1px solid darken(background-color, 30%)
+  padding .25em
+  height 2em
+  width @height * 5
+  font-size 1em;
 
-    &[type='checkbox']
-      height 1em
-      width 1em
-      margin 0.5em
+  &:focus
+    border-color main-color
+
+  &[type='checkbox']
+    height 1em
+    width 1em
+    margin 0.5em
 
 fieldset
   border 1px solid darken(background-color, 30%)
@@ -117,39 +121,3 @@ fieldset
 
     &:hover
       text-decoration underline
-
-
-.button
-  background main-color
-  border 1px solid darken(main-color, 30%)
-  padding .5em 1em
-  color #fff
-  border-radius .5em
-  cursor pointer
-  display inline-block
-  font-size 1em
-  line-height 1
-  margin .2em
-  -webkit-appearance none
-
-  &:hover
-    background darken(main-color, 30%)
-    border-color darken(main-color, 50%)
-    text-decoration none
-
-.submit
-  @extend .button
-  background confirm-color
-  border-color darken(confirm-color, 50%)
-
-  &:hover
-    background darken(confirm-color, 30%)
-    border-color darken(confirm-color, 50%)
-
-.error
-  color darken(main-color, 30%)
-
-.no-data
-  text-align center
-  font-style oblique
-  color lighten(text-color, 20%)
