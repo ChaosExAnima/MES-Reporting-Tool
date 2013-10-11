@@ -18,12 +18,27 @@ exports.route = function(app, path) {
 	form.configure({ autoTrim: true });
 
 	var validation = form(
-			field('date').required().isDate()
-		);
+		field('date').required().isDate(),
+		field('events').array(),
+		field('projects').array(),
+		field('finance.start').required().is(/^\$\d+(\.\d{2})?$/),
+		field('finance.sites').is(/^\$\d+(\.\d{2})?$/),
+		field('finance.donations').is(/^\$\d+(\.\d{2})?$/),
+		field('finance.food').is(/^\$\d+(\.\d{2})?$/),
+		field('finance.space').is(/^\$\d+(\.\d{2})?$/),
+		field('finance.prop').is(/^\$\d+(\.\d{2})?$/),
+		field('finance.bank').is(/^\$\d+(\.\d{2})?$/),
+		field('elections').array(),
+		field('problems'),
+		field('suggestions'),
+		field('comments'),
+		field('nominations').array(),	
+		field('das').array()
+	);
 
 	app.get(path+'/:id([0-9]{4}/[0-9]{2})/?$', this.detail)
 	app.get(path+'/add', this.add)
-	app.post(path+'/add/done', validation, this.submit)
+	app.post(path+'/add', validation, this.submit)
 	app.get(path, this.list)
 
 	return app;
@@ -73,14 +88,14 @@ exports.add = function(req, res) {
 		var date = new Date();
 		date.setMonth( date.getMonth() === 0 ? 11 : date.getMonth() -1 );
 
-		
-
 		fields = {
 			date: [dateformat(date, 'yyyy-mm'), false],
 		};
+
+		// Get the old stuff here.
 	} else { // Submitted.
 		fields = {
-			date: [],
+			date: [form.date, false],
 		}
 	}
 
@@ -100,5 +115,9 @@ exports.edit = function(req, res) {
  * Submits a report.
  */
 exports.submit = function(req, res) {
-	
+	log(req.form);
+
+	if(!req.form.isValid) {
+		exports.add(req, res);
+	}
 }

@@ -1737,27 +1737,39 @@ label {
   width: 50%;
   height: 2em;
   line-height: 2em;
+  clear: both;
 }
-label input {
+label input,
+label textarea {
   float: right;
   width: 15em;
 }
-input {
+input,
+textarea {
   -webkit-border-radius: 0.5em;
   border-radius: 0.5em;
   border: 1px solid #d5d582;
   padding: 0.25em;
-  height: 2em;
-  width: 10em;
   font-size: 1em;
 }
-input:focus {
+input:focus,
+textarea:focus {
   border-color: #fa6464;
+}
+input {
+  height: 2em;
+  width: 10em;
 }
 input[type='checkbox'] {
   height: 1em;
   width: 1em;
   margin: 0.5em;
+}
+textarea {
+  width: 10em;
+  min-height: 2em;
+  resize: vertical;
+  margin-bottom: 1em;
 }
 fieldset {
   border: 1px solid #d5d582;
@@ -1896,5 +1908,7 @@ button:hover,
   text-decoration: underline;
 }
 .report-add fieldset > div {
-  margin: 0.5em 0;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #d5d582;
+  margin: 1em 0;
 }

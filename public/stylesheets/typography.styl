@@ -81,26 +81,37 @@ label
   width 50%
   height 2em
   line-height @height
+  clear both
 
   input
-    float right    
+  textarea
+    float right
     width 15em
 
 input
+textarea
   border-radius .5em
   border 1px solid darken(background-color, 30%)
   padding .25em
-  height 2em
-  width @height * 5
-  font-size 1em;
+  font-size 1em
 
   &:focus
     border-color main-color
+
+input
+  height 2em
+  width @height * 5  
 
   &[type='checkbox']
     height 1em
     width 1em
     margin 0.5em
+
+textarea
+  width 10em
+  min-height 2em
+  resize vertical
+  margin-bottom 1em
 
 fieldset
   border 1px solid darken(background-color, 30%)

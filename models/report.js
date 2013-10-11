@@ -51,9 +51,9 @@ var ReportSchema = new Schema({
 		date: Number
 	}],
 	comments: {
-		problems: [String],
-		suggestions: [String],
-		comments: [String]
+		problems: String,
+		suggestions: String,
+		comments: String
 	},
 	members: {
 		fresh: [ObjectId],
@@ -67,7 +67,15 @@ var ReportSchema = new Schema({
 		user: ObjectId,
 		awards: [ObjectId]
 	}],
-	nominations: [ObjectId],
+	nominations: [{
+		name: String,
+		mes: String,
+		domain: String,
+		email: String,
+		recommender: ObjectId,
+		reason: String,
+		prestige: String
+	}],
 	das: [{
 		user: ObjectId,
 		text: String

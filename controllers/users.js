@@ -13,10 +13,10 @@ exports.route = function(app, path) {
 	form.configure({ autoTrim: true });
 
 	var validation = form(
-		field('first').required().is(/^[a-z\.-\s]+$/i).trim(),
-		field('last').required().is(/^[a-z\.-\s]+$/i).trim(),
+		field('first').required().is(/^[a-z\.-\s]+$/i),
+		field('last').required().is(/^[a-z\.-\s]+$/i),
 		field('email').isEmail(),
-		field('mes').required().is(/^[a-z]{2}\d{10}$/i).toUpper().trim(),
+		field('mes').required().is(/^[a-z]{2}\d{10}$/i).toUpper(),
 		field('expiration').required().isDate(),
 		field('trial').toBoolean(),
 		field('mc').isInt(),

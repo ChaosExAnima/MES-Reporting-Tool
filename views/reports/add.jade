@@ -5,25 +5,86 @@ block content
 		label(class=fields.date[1]) Date:
 			input(type="text", name="date", value=fields.date[0], placeholder="YYYY-MM")
 
-		fieldset#events
+		fieldset#events.close
 			legend Events
 			div.template
-				input(type="date", name="event_date[]", placeholder="YYYY-MM-DD").date
+				input(type="date", name="events[i][date]", placeholder="YYYY-MM-DD", disabled).date
 				&nbsp;-&nbsp;
-				input(type="text", name="event_name[]", placeholder="Event")
-				a.edit.icon-edit
+				input(type="text", name="events[i][name]", placeholder="Event", disabled)
 				a.cancel.icon-remove
-			button.submit.icon-plus-sign  Add
+			a.submit.icon-plus-sign  Add
 
-		fieldset#projects
+		fieldset#projects.close
 			legend Current Projects
 			div.template
-				input(type="text", name="projects[]", placeholder="Project")
+				input(type="text", name="projects[]", placeholder="Project", disabled)
+				a.cancel.icon-remove
+			a.submit.icon-plus-sign  Add
 
 		fieldset#finances
 			legend Finances
 			label Beginning Balance:
-				input(type="text", name="finance_start")
+				input(type="text", name="finance.start")
+			label Site Fee Income:
+				input(type="text", name="finance.sites")
+			label Donation Income:
+				input(type="text", name="finance.donations")
+			label Food Expenses:
+				input(type="text", name="finance.food")
+			label Space Expenses:
+				input(type="text", name="finance.space")
+			label Prop Expenses:
+				input(type="text", name="finance.prop")
+			label Bank Expenses:
+				input(type="text", name="finance.bank")
+
+		fieldset#elections.close
+			legend Ongoing or Required Elections
+			div.template
+				input(type="date", name="elections[i].date", placeholder="YYYY-MM-DD", disabled).date
+				&nbsp;-&nbsp;
+				input(type="text", name="elections[i].text", placeholder="Election", disabled)
+				a.cancel.icon-remove
+			a.submit.icon-plus-sign  Add
+
+		fieldset#comments.close
+			legend Problems, Suggestions, and Comments
+			label Problems:
+				textarea(name="problems")
+			label Suggestions:
+				textarea(name="suggestions")
+			label Comments:
+				textarea(name="comments")
+
+		fieldset#recommendations.close
+			legend Prestige for Outside Members
+			div.template
+				label Member Name:
+					input(type="text", name="nominations[i].name", disabled)
+				label Member MES #:
+					input(type="text", name="nominations[i].mes", disabled)
+				label Domain:
+					input(type="text", name="nominations[i].domain", disabled)
+				label Email:
+					input(type="email", name="nominations[i].email", disabled)
+				label Recommended By:
+					input(type="text", name="nominations[i].recommender", class="auto-complete-mes", disabled)
+				label Reason:
+					input(type="text", name="nominations[i].reason", disabled)
+				label Amount:
+					input(type="text", name="nominations.prestige", disabled)
+				a.cancel.icon-remove  Remove
+			a.submit.icon-plus-sign  Add
+
+		fieldset#disciplinaryactions.close
+			legend Disciplinary Actions
+			div.template
+				label Member:
+					input(type="text", name="das[i].member", class="auto-complete-mes", disabled)
+				label Action:
+					input(type="text", name="das[i].action", disabled)
+				a.cancel.icon-remove  Remove
+			a.submit.icon-plus-sign  Add
 
 		input(type="submit", value="Submit", class="submit")
 		a(class="button", href="/report") Cancel
