@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+	table(class="user-index")
+		thead
+			tr
+				th Date
+				th Status
+				th
+		- if(reports.length)
+			tbody
+			- each report in reports
+				tr
+					td: a(href="/report/"+report._id)= report.date
+					td= report.status
+					td
+						a(href="/report/delete/"+report._id, class="btn-red") Delete
+						a(href="/report/view/"+report._id, class="btn-yellow") View
+		- else
+			tr: td(colspan=3, class='no-data') No reports found!
+
+
+	a(href="/report/add", class="btn-green") Create New

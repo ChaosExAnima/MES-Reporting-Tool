@@ -1,7 +1,42 @@
+/**
+ * Notifications.
+ */
+
+
+.msg-box
+  padding .5em
+  margin-bottom 1em
+  border 1px solid background-color
+
+.msg-box
+  &.notification
+    color darken(background-color, 70%)
+    border-color darken(background-color, 50%)
+    background-color darken(background-color, 10%)
+
+  &.warning
+    color white
+    background accent-color
+    border-color darken(accent-color, 30%)
+
+  &.error
+    color white
+    background main-color
+    border-color darken(main-color, 30%)
+
+/**
+ * Text
+ */
+
+.error
+  color darken(main-color, 30%)
+
+
+/**
+ * Buttons
+ */
+
 .button
-button
-  background main-color
-  border 1px solid darken(main-color, 30%)
   padding .5em 1em
   color #fff
   border-radius .5em
@@ -13,11 +48,21 @@ button
   -webkit-appearance none
 
   &:hover
-    background darken(main-color, 30%)
-    border-color darken(main-color, 50%)
     text-decoration none
 
-.submit
+.container > a:last-child
+    margin-top 1em
+
+.btn-red
+  @extend .button
+  background main-color
+  border 1px solid darken(main-color, 30%)
+
+  &:hover
+    background darken(main-color, 30%)
+    border-color darken(main-color, 50%)
+
+.btn-green
   @extend .button
   background confirm-color
   border-color darken(confirm-color, 50%)
@@ -26,26 +71,40 @@ button
     background darken(confirm-color, 30%)
     border-color darken(confirm-color, 50%)
 
-.error
-  color darken(main-color, 30%)
+.btn-yellow
+  @extend .button
+  background accent-color
+  border-color darken(accent-color, 50%)
+
+  &:hover
+    background saturate(accent-color, 50%)
+    border-color darken(accent-color, 30%)
+
+.cancel
+  @extend .btn-red
+
+.edit
+  @extend .btn-green
 
 .cancel
 .edit
-  @extend .button
   padding 0.5em
   margin 0 .2em
   height 2em
 
-.edit
-  @extend .submit
+
+/**
+ * Data.
+ */
 
 .no-data
   text-align center
   font-style oblique
   color lighten(text-color, 20%)
 
-.hide
-  display none
+.date
+  width 12em
 
+.hide
 .start-closed
-  @extend .hide
+  display none

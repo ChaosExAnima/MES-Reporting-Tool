@@ -5,86 +5,134 @@ block content
 		label(class=fields.date[1]) Date:
 			input(type="text", name="date", value=fields.date[0], placeholder="YYYY-MM")
 
-		fieldset#events.close
+		fieldset#events(class=fields.events.length ? '' : 'close')
 			legend Events
 			div.template
 				input(type="date", name="events[i][date]", placeholder="YYYY-MM-DD", disabled).date
 				&nbsp;-&nbsp;
 				input(type="text", name="events[i][name]", placeholder="Event", disabled)
 				a.cancel.icon-remove
+			- each event, i in fields.events
+				div
+					input(type="date", name="events["+i+"][date]", placeholder="YYYY-MM-DD", value=event.date).date
+					&nbsp;-&nbsp;
+					input(type="text", name="events["+i+"][name]", placeholder="Event", value=event.name)
+					a.cancel.icon-remove
 			a.submit.icon-plus-sign  Add
 
-		fieldset#projects.close
+		fieldset#projects(class=fields.projects.length ? '' : 'close')
 			legend Current Projects
 			div.template
 				input(type="text", name="projects[]", placeholder="Project", disabled)
 				a.cancel.icon-remove
+			- each project in fields.projects
+				div
+					input(type="text", name="projects[]", placeholder="Project", value=project)
+					a.cancel.icon-remove
 			a.submit.icon-plus-sign  Add
 
 		fieldset#finances
 			legend Finances
-			label Beginning Balance:
-				input(type="text", name="finance.start")
-			label Site Fee Income:
-				input(type="text", name="finance.sites")
-			label Donation Income:
-				input(type="text", name="finance.donations")
-			label Food Expenses:
-				input(type="text", name="finance.food")
-			label Space Expenses:
-				input(type="text", name="finance.space")
-			label Prop Expenses:
-				input(type="text", name="finance.prop")
-			label Bank Expenses:
-				input(type="text", name="finance.bank")
+			label(class=fields.finance.start[1]) Beginning Balance:
+				input(type="text", name="finance[start]", value=fields.finance.start[0])
+			label(class=fields.finance.sites[1]) Site Fee Income:
+				input(type="text", name="finance[sites]", value=fields.finance.sites[0])
+			label(class=fields.finance.donations[1]) Donation Income:
+				input(type="text", name="finance[donations]", value=fields.finance.donations[0])
+			label(class=fields.finance.food[1]) Food Expenses:
+				input(type="text", name="finance[food]", value=fields.finance.food[0])
+			label(class=fields.finance.space[1]) Space Expenses:
+				input(type="text", name="finance[space]", value=fields.finance.space[0])
+			label(class=fields.finance.prop[1]) Prop Expenses:
+				input(type="text", name="finance[prop]", value=fields.finance.prop[0])
+			label(class=fields.finance.bank[1]) Bank Expenses:
+				input(type="text", name="finance[bank]", value=fields.finance.bank[0])
 
-		fieldset#elections.close
+		fieldset#elections(class=fields.elections.length ? '' : 'close')
 			legend Ongoing or Required Elections
 			div.template
-				input(type="date", name="elections[i].date", placeholder="YYYY-MM-DD", disabled).date
+				select(name="elections[i][position]", disabled)
+					- each val in data.positions
+						option(value=val)= val
 				&nbsp;-&nbsp;
-				input(type="text", name="elections[i].text", placeholder="Election", disabled)
+				select(name="elections[i][stage]", disabled)
+					- each val in data.stages
+						option(value=val)= val
 				a.cancel.icon-remove
+			- each election, i in fields.elections
+				div
+					select(name="elections["+i+"][position]")
+						- each val in data.positions
+							option(value=val, selected=(fields.elections[i].position == val) ? 'selected' : null)= val
+					&nbsp;-&nbsp;
+					select(name="elections["+i+"][stage]")
+						- each val in data.stages
+							option(value=val, selected=(fields.elections[i].stage == val) ? 'selected' : null)= val
+					a.cancel.icon-remove
 			a.submit.icon-plus-sign  Add
 
-		fieldset#comments.close
+		fieldset#comments
 			legend Problems, Suggestions, and Comments
 			label Problems:
-				textarea(name="problems")
+				textarea(name="problems")= fields.problems[0]
 			label Suggestions:
-				textarea(name="suggestions")
+				textarea(name="suggestions")= fields.suggestions[0]
 			label Comments:
-				textarea(name="comments")
+				textarea(name="comments")= fields.comments[0]
 
-		fieldset#recommendations.close
+		fieldset#recommendations(class=fields.nominations.length ? '' : 'close')
 			legend Prestige for Outside Members
 			div.template
 				label Member Name:
-					input(type="text", name="nominations[i].name", disabled)
+					input(type="text", name="nominations[i][name]", disabled)
 				label Member MES #:
-					input(type="text", name="nominations[i].mes", disabled)
+					input(type="text", name="nominations[i][mes]", disabled)
 				label Domain:
-					input(type="text", name="nominations[i].domain", disabled)
+					input(type="text", name="nominations[i][domain]", disabled)
 				label Email:
-					input(type="email", name="nominations[i].email", disabled)
+					input(type="email", name="nominations[i][email]", disabled)
 				label Recommended By:
-					input(type="text", name="nominations[i].recommender", class="auto-complete-mes", disabled)
+					input(type="text", name="nominations[i][recommender]", class="auto-complete-mes", disabled)
 				label Reason:
-					input(type="text", name="nominations[i].reason", disabled)
+					input(type="text", name="nominations[i][reason]", disabled)
 				label Amount:
-					input(type="text", name="nominations.prestige", disabled)
+					input(type="text", name="nominations[i][prestige]", disabled)
 				a.cancel.icon-remove  Remove
+			- each nomination, i in fields.nominations
+				div
+					label Member Name:
+						input(type="text", name="nominations["+i+"][name]", value=nomination.name)
+					label Member MES #:
+						input(type="text", name="nominations["+i+"][mes]", value=nomination.mes)
+					label Domain:
+						input(type="text", name="nominations["+i+"][domain]", value=nomination.domain)
+					label Email:
+						input(type="email", name="nominations["+i+"][email]", value=nomination.email)
+					label Recommended By:
+						input(type="text", name="nominations["+i+"][recommender]", class="auto-complete-mes", value=nomination.recommender)
+					label Reason:
+						input(type="text", name="nominations["+i+"][reason]", value=nomination.reason)
+					label Amount:
+						input(type="text", name="nominations["+i+"][prestige]", value=nomination.prestige)
+					a.cancel.icon-remove  Remove
 			a.submit.icon-plus-sign  Add
 
-		fieldset#disciplinaryactions.close
+		fieldset#disciplinaryactions(class=fields.das.length ? '' : 'close')
 			legend Disciplinary Actions
 			div.template
 				label Member:
-					input(type="text", name="das[i].member", class="auto-complete-mes", disabled)
+					input(type="text", name="das[i][member]", class="auto-complete-mes", disabled)
 				label Action:
-					input(type="text", name="das[i].action", disabled)
+					input(type="text", name="das[i][action]", disabled)
 				a.cancel.icon-remove  Remove
+			- each action, i in fields.das
+				div
+					label Member:
+						input(type="text", name="das["+i+"][member]", class="auto-complete-mes", value=action.member)
+					label Action:
+						input(type="text", name="das["+i+"][action]", value=action.action)
+					a.cancel.icon-remove  Remove
 			a.submit.icon-plus-sign  Add
 
-		input(type="submit", value="Submit", class="submit")
-		a(class="button", href="/report") Cancel
+		input(type="submit", value="Submit", class="btn-green")
+		a(class="btn-red", href="/report") Cancel

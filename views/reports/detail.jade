@@ -1,0 +1,62 @@
+extend ../layout
+
+block content
+	h2= "Report for "+report.date
+	p= "Status: "+report.status
+
+	if report.upcoming.length
+		fieldset
+			legend Upcoming Events
+			each upcoming in report.upcoming
+				p
+					= upcoming.date
+					|  &ndash;
+					= upcoming.name
+
+	if report.projects.length
+		fieldset
+			legend Current Projects
+			each project in report.projects
+				p= project
+
+	fieldset
+		legend Finances
+		p= "Beginning Balance: $"+(report.finance.start/100)
+		p= "Total Income: $"+(report.finance.income.total/100)
+		p= "Site Fees: $"+(report.finance.income.sitefees/100)
+		p= "Donations: $"+(report.finance.income.donations/100)
+		p= "Total Expenses: $"+(report.finance.expenses.total/100)
+		p= "Food: $"+(report.finance.expenses.food/100)
+		p= "Space: $"+(report.finance.expenses.space/100)
+		p= "Props: $"+(report.finance.expenses.props/100)
+		p= "Bank fees: $"+(report.finance.expenses.fees/100)
+		p= "Ending Balance: $"+(report.finance.end/100)
+
+	if report.elections.length
+		fieldset
+			legend Ongoing or Required Elections
+			each election in report.elections
+				p
+					= election.position
+					|  &ndash;
+					= election.stage
+
+	fieldset
+		legend Problems, Suggestions, and Comments
+		p= "Problems: "+report.comments.problems
+		p= "Suggestions: "+report.comments.suggestions
+		p= "Comments: "+report.comments.comments
+
+	if report.nominations.length
+		fieldset
+			legend Prestige for Outside Members
+			each nomination in report.nominations
+				p
+					a(href="mailto:"+nomination.email)= nomination.name + " (" + nomination.mes +")"
+					|  by foo
+
+	if report.das.length
+		fieldset
+			legend Disciplinary Actions
+			each action in report.das
+				p= action.text

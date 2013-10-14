@@ -60,7 +60,7 @@ exports.index = function(req, res) {
 			users[i].is_expired = users[i].expire <= new Date().getTime();
 			users[i].expire = dateformat(users[i].expire, "yyyy-mm-dd");
 		};
-		res.render('users/index', {title: 'Users', nav: config.nav, cururl: '/user', users: users, sort: Object.keys(sort)[0] })
+		res.render('users/index', {title: 'Users', users: users, sort: Object.keys(sort)[0] })
 	});	
 }
 
@@ -88,7 +88,7 @@ exports.detail = function(req, res) {
 					awards[i].date = dateformat(awards[i].date, "yyyy-mm-dd");
 				};
 
-				res.render('users/detail', { title: title, nav: config.nav, cururl: '/user', user: user, awards: awards });
+				res.render('users/detail', { title: title, user: user, awards: awards });
 			});
 		});
 	} else {
@@ -138,7 +138,7 @@ exports.add = function(req, res) {
 		}
 	}
 
-	res.render('users/add', {title: 'Add User', nav: config.nav, cururl: '/user', fields: fields})
+	res.render('users/add', {title: 'Add User', fields: fields})
 }
 
 
@@ -207,7 +207,7 @@ exports.edit = function(req, res) {
 			fields.email[0] = '';
 		}
 
-		res.render('users/edit', {title: 'Edit User '+user.name.last+', '+user.name.first, nav: config.nav, cururl: '/user', fields: fields, mes: user.mes})
+		res.render('users/edit', {title: 'Edit User '+user.name.last+', '+user.name.first, fields: fields, mes: user.mes})
 	});
 }
 
@@ -243,8 +243,6 @@ exports.submit = function(req, res) {
 	} else {
 		var form = req.form;
 
-		log(form.expiration);
-
 		// Add/update user.
 		var user = {
 			name: {
@@ -265,9 +263,6 @@ exports.submit = function(req, res) {
 			standards: form.standard,
 			disciplinaryactions: [],
 		};
-
-		log(user);
-
 
 		User.update({ mes: id }, user, { upsert: true }, function(err) {
 			if(id) {

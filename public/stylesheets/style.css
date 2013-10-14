@@ -172,7 +172,6 @@ a [class*=" icon-"] {
 .hide,
 [class*=" icon-"],
 .hide,
-.start-closed,
 .report-add .template {
   display: none;
 }
@@ -1740,12 +1739,15 @@ label {
   clear: both;
 }
 label input,
-label textarea {
+label textarea,
+label select {
   float: right;
   width: 15em;
 }
 input,
-textarea {
+textarea,
+select {
+  background: #fff;
   -webkit-border-radius: 0.5em;
   border-radius: 0.5em;
   border: 1px solid #d5d582;
@@ -1753,7 +1755,8 @@ textarea {
   font-size: 1em;
 }
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
   border-color: #fa6464;
 }
 input {
@@ -1770,6 +1773,9 @@ textarea {
   min-height: 2em;
   resize: vertical;
   margin-bottom: 1em;
+}
+select {
+  width: 10em;
 }
 fieldset {
   border: 1px solid #d5d582;
@@ -1839,13 +1845,35 @@ footer {
 footer p {
   font-size: 0.75em;
 }
+.msg-box {
+  padding: 0.5em;
+  margin-bottom: 1em;
+  border: 1px solid #fafaf0;
+}
+.msg-box.notification {
+  color: #6e6e25;
+  border-color: #b8b83d;
+  background-color: #eeeecb;
+}
+.msg-box.warning {
+  color: #fff;
+  background: #f0a000;
+  border-color: #a87000;
+}
+.msg-box.error {
+  color: #fff;
+  background: #fa6464;
+  border-color: #ed0808;
+}
+.error {
+  color: #ed0808;
+}
 .button,
-button,
-.submit,
+.btn-red,
+.btn-green,
+.btn-yellow,
 .cancel,
 .edit {
-  background: #fa6464;
-  border: 1px solid #ed0808;
   padding: 0.5em 1em;
   color: #fff;
   -webkit-border-radius: 0.5em;
@@ -1858,26 +1886,43 @@ button,
   -webkit-appearance: none;
 }
 .button:hover,
-button:hover,
-.submit:hover,
+.btn-red:hover,
+.btn-green:hover,
+.btn-yellow:hover,
 .cancel:hover,
 .edit:hover {
-  background: #ed0808;
-  border-color: #aa0505;
   text-decoration: none;
 }
-.submit,
+.container > a:last-child {
+  margin-top: 1em;
+}
+.btn-red,
+.cancel {
+  background: #fa6464;
+  border: 1px solid #ed0808;
+}
+.btn-red:hover,
+.cancel:hover {
+  background: #ed0808;
+  border-color: #aa0505;
+}
+.btn-green,
 .edit {
   background: #46c846;
   border-color: #1f681f;
 }
-.submit:hover,
+.btn-green:hover,
 .edit:hover {
   background: #2b922b;
   border-color: #1f681f;
 }
-.error {
-  color: #ed0808;
+.btn-yellow {
+  background: #f0a000;
+  border-color: #785000;
+}
+.btn-yellow:hover {
+  background: #ffb400;
+  border-color: #a87000;
 }
 .cancel,
 .edit {
@@ -1889,6 +1934,9 @@ button:hover,
   text-align: center;
   font-style: oblique;
   color: #696969;
+}
+.date {
+  width: 12em;
 }
 .hide,
 .start-closed,

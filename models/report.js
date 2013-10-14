@@ -12,6 +12,7 @@ var mongoose = require('mongoose'),
 
 var ReportSchema = new Schema({
 	date: { type: Number, index: true },
+	status: { type: String, enum: ['Created', 'Ready', 'Published'], default: 'Created' },
 	counts: {
 		members: Number,
 		trial: Number,
@@ -29,6 +30,7 @@ var ReportSchema = new Schema({
 		name: String,
 		date: Number
 	}],
+	projects: [String],
 	finance: {
 		start: Number,
 		end: Number,
@@ -69,8 +71,8 @@ var ReportSchema = new Schema({
 	}],
 	nominations: [{
 		name: String,
-		mes: String,
-		domain: String,
+		mes: { type: String, match: /^[A-Z]{2}[0-9]{10}$/ },
+		location: String,
 		email: String,
 		recommender: ObjectId,
 		reason: String,

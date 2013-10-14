@@ -37,19 +37,148 @@
 	"categories" : [
 		{
 			"name" : "Administration",
-			"cap" : 80
+			"cap"  : 80
 		},
 		{
 			"name" : "Non-Administrative Game Support",
-			"cap" : 50
+			"cap"  : 50
 		},
 		{
 			"name" : "Social/Non-Game Support",
-			"cap" : 50
+			"cap"  : 50
 		},
 		{
 			"name" : "Miscellaneous",
-			"cap" : 0
+			"cap"  : 0
 		}
-	]
+	],
+	"venues" : [
+		"Awakening",
+		"Accord",
+		"Lost",
+		"Requiem",
+		"Masquerade"
+	],
+	"mclevels" : {
+		"1" : {
+			"name" : "Associate",
+			"req" : {
+				"g" : 0,
+				"r" : 0,
+				"n" : 0
+			}
+		},
+		"2" : {
+			"name" : "Journeyman",
+			"req" : {
+				"g" : 100,
+				"r" : 0,
+				"n" : 0
+			}
+		},
+		"3" : {
+			"name" : "Artisan",
+			"req" : {
+				"g" : 300,
+				"r" : 0,
+				"n" : 0
+			}
+		},
+		"4" : {
+			"name" : "Contributor",
+			"req" : {
+				"g" : 600,
+				"r" : 0,
+				"n" : 0
+			}
+		},
+		"5" : {
+			"name" : "Sponsor",
+			"req" : {
+				"g" : 1000,
+				"r" : 0,
+				"n" : 0
+			}
+		},
+		"6" : {
+			"name" : "Steward",
+			"req" : {
+				"g" : 1500,
+				"r" : 0,
+				"n" : 0
+			}
+		},
+		"7" : {
+			"name" : "Benefactor",
+			"req" : {
+				"g" : 2100,
+				"r" : 0,
+				"n" : 0
+			}
+		},
+		"8" : {
+			"name" : "Advocate",
+			"req" : {
+				"g" : 2700,
+				"r" : 0,
+				"n" : 0
+			}
+		},
+		"9" : {
+			"name" : "Adviser",
+			"req" : {
+				"g" : 3400,
+				"r" : 100,
+				"n" : 0
+			}
+		},
+		"10" : {
+			"name" : "Patron",
+			"req" : {
+				"g" : 4100,
+				"r" : 300,
+				"n" : 0
+			}
+		},
+		"11" : {
+			"name" : "Mentor",
+			"req" : {
+				"g" : 4800,
+				"r" : 600,
+				"n" : 0
+			}
+		},
+		"12" : {
+			"name" : "Luminary",
+			"req" : {
+				"g" : 5400,
+				"r" : 900,
+				"n" : 100
+			}
+		},
+		"13" : {
+			"name" : "Executive",
+			"req" : {
+				"g" : 6100,
+				"r" : 1200,
+				"n" : 300
+			}
+		},
+		"14" : {
+			"name" : "Fellow",
+			"req" : {
+				"g" : 6900,
+				"r" : 1500,
+				"n" : 800
+			}
+		},
+		"15" : {
+			"name" : "Trustee",
+			"req" : {
+				"g" : 0,
+				"r" : 0,
+				"n" : 0
+			}
+		}
+	}
 }

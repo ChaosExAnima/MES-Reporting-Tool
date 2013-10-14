@@ -34,8 +34,8 @@ app.use(express.bodyParser());
 var coffeescript = require('connect-coffee-script');
 
 app.use(coffeescript({
-  src: __dirname + '/public',
-  bare: true
+  	src: __dirname + '/public',
+  	bare: true
 }));
 
 // Sets static directory.
@@ -69,6 +69,17 @@ function setupRoutes() {
 		reports = require('./controllers/reports.js');
 
 	log('Configuring routes.');
+
+	// Set up basic template variables.
+	app.locals({
+		nav: config.nav,
+		flash: false
+	});
+
+	app.use(function(req, res, next) {
+		app.locals.cururl = req.url.match(/^(\/[a-z]*)/)[0];
+		next();
+	});
 
 	app.get('/', statics.home);
 
