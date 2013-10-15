@@ -11,25 +11,25 @@ block content
 				input(type="date", name="events[i][date]", placeholder="YYYY-MM-DD", disabled).date
 				&nbsp;-&nbsp;
 				input(type="text", name="events[i][name]", placeholder="Event", disabled)
-				a.cancel.icon-remove
+				a.btn-red.icon-remove
 			- each event, i in fields.events
 				div
 					input(type="date", name="events["+i+"][date]", placeholder="YYYY-MM-DD", value=event.date).date
 					&nbsp;-&nbsp;
 					input(type="text", name="events["+i+"][name]", placeholder="Event", value=event.name)
-					a.cancel.icon-remove
-			a.submit.icon-plus-sign  Add
+					a.btn-red.icon-remove
+			a.btn-green.icon-plus-sign  Add
 
 		fieldset#projects(class=fields.projects.length ? '' : 'close')
 			legend Current Projects
 			div.template
 				input(type="text", name="projects[]", placeholder="Project", disabled)
-				a.cancel.icon-remove
+				a.btn-red.icon-remove
 			- each project in fields.projects
 				div
 					input(type="text", name="projects[]", placeholder="Project", value=project)
-					a.cancel.icon-remove
-			a.submit.icon-plus-sign  Add
+					a.btn-red.icon-remove
+			a.btn-green.icon-plus-sign  Add
 
 		fieldset#finances
 			legend Finances
@@ -58,7 +58,7 @@ block content
 				select(name="elections[i][stage]", disabled)
 					- each val in data.stages
 						option(value=val)= val
-				a.cancel.icon-remove
+				a.btn-red.icon-remove
 			- each election, i in fields.elections
 				div
 					select(name="elections["+i+"][position]")
@@ -68,8 +68,8 @@ block content
 					select(name="elections["+i+"][stage]")
 						- each val in data.stages
 							option(value=val, selected=(fields.elections[i].stage == val) ? 'selected' : null)= val
-					a.cancel.icon-remove
-			a.submit.icon-plus-sign  Add
+					a.btn-red.icon-remove
+			a.btn-green.icon-plus-sign  Add
 
 		fieldset#comments
 			legend Problems, Suggestions, and Comments
@@ -97,7 +97,7 @@ block content
 					input(type="text", name="nominations[i][reason]", disabled)
 				label Amount:
 					input(type="text", name="nominations[i][prestige]", disabled)
-				a.cancel.icon-remove  Remove
+				a.btn-red.icon-remove  Remove
 			- each nomination, i in fields.nominations
 				div
 					label Member Name:
@@ -114,8 +114,8 @@ block content
 						input(type="text", name="nominations["+i+"][reason]", value=nomination.reason)
 					label Amount:
 						input(type="text", name="nominations["+i+"][prestige]", value=nomination.prestige)
-					a.cancel.icon-remove  Remove
-			a.submit.icon-plus-sign  Add
+					a.btn-red.icon-remove  Remove
+			a.btn-green.icon-plus-sign  Add
 
 		fieldset#disciplinaryactions(class=fields.das.length ? '' : 'close')
 			legend Disciplinary Actions
@@ -124,15 +124,15 @@ block content
 					input(type="text", name="das[i][member]", class="auto-complete-mes", disabled)
 				label Action:
 					input(type="text", name="das[i][action]", disabled)
-				a.cancel.icon-remove  Remove
+				a.btn-red.icon-remove  Remove
 			- each action, i in fields.das
 				div
 					label Member:
 						input(type="text", name="das["+i+"][member]", class="auto-complete-mes", value=action.member)
 					label Action:
 						input(type="text", name="das["+i+"][action]", value=action.action)
-					a.cancel.icon-remove  Remove
-			a.submit.icon-plus-sign  Add
+					a.btn-red.icon-remove  Remove
+			a.btn-green.icon-plus-sign  Add
 
 		input(type="submit", value="Submit", class="btn-green")
 		a(class="btn-red", href="/report") Cancel

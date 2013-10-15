@@ -29,6 +29,8 @@ exports.route = function(app, path) {
 	app.get(path+'/add', this.add)
 	app.post(path+'/add', validation, this.submit)
 
+	app.get(path+'/search/', this.search)
+
 	app.get(path+'/edit/:id([A-Z]{2}\\d+)', this.edit)
 	app.post(path+'/edit/:id([A-Z]{2}\\d+)', validation, this.submit)
 
@@ -270,6 +272,38 @@ exports.submit = function(req, res) {
 			} else {
 				res.redirect('/user');
 			}
+		});
+	}
+}
+
+
+/**
+ * Interface for autocompletion based on user name.
+ */
+exports.search = function(req, res) {
+	var query = req.query.term;
+
+	if(!query || query.length < 3) {
+		res.json([]);
+	} else {
+		var reg = new RegExp(query, "i");
+		User.find({ 
+			$or: [
+				{ "name.first": reg },
+				{ "name.last": reg },
+				{ "mes": reg }
+			] 
+		}, 
+		{ "name": 1, "mes": 1 },
+		function(err, users) {
+			var data = [];
+			users.forEach(function(user) {
+				data.push({
+					label: user.name.first + " " + user.name.last,
+					value: user.mes
+				});
+			});
+			res.json(data);
 		});
 	}
 }

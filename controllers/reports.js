@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
 	dateformat = require('dateformat'),
-	Report = mongoose.model('Report')
+	async = require('async'),
+	Report = mongoose.model('Report'),
 	User = mongoose.model('User'),
 	Prestige = mongoose.model('Prestige');
 
@@ -36,11 +37,11 @@ exports.route = function(app, path) {
 		field('das').array()
 	);
 
-	app.get(path+'/:id([0-9a-z]+)/?$', this.detail);
 	app.get(path+'/edit/([0-9a-z]+)/?$', this.edit);
 	app.get(path+'/view/([0-9a-z]+)/?$', this.view);
 	app.get(path+'/add', this.add);
 	app.post(path+'/add', validation, this.submit);
+	app.get(path+'/:id([0-9a-z]+)/?$', this.detail);
 	app.get(path, this.index);
 
 	return app;
@@ -77,8 +78,35 @@ exports.detail = function(req, res) {
 			data.upcoming.forEach(function(election) {
 				election.date = dateformat(election.date, 'yyyy-mm-dd');
 			});
-			log(data);
-			res.render('reports/detail', {title: 'Report for '+dateformat(data.date, 'yyyy-mm'), report: data});
+
+			User.find({}, function(err, users) {
+				// log(users.length);
+
+				async.parallel([
+					function(callback) {
+						async.each(data.nominations, function(item, done) {
+							User.findOne({ _id : item.recommender }, function(err, user) {
+								log("Nominations: Found "+user.name.first+" "+user.name.last);
+								item.recommender = user;
+								done();
+							});
+						}, callback);
+					},
+					function(callback) {
+						async.each(data.das, function(item, done) {
+							User.findOne({ _id : item.user }, function(err, user) {
+								log("DAs: Found "+user.name.first+" "+user.name.last);
+								item.user = user;
+								done();
+							});
+						}, callback);
+					}],
+					function() {
+						log(data);
+						res.render('reports/detail', {title: 'Report for '+dateformat(data.date, 'yyyy-mm'), report: data, users: users});
+					}
+				)				
+			});
 		}
 	});
 }
@@ -214,59 +242,65 @@ exports.submit = function(req, res) {
 			das: []
 		};
 
-		// Get events.
-		form.events.forEach(function(event) {
-			report.upcoming.push({
-				date: Date.parse(event.date) + 18000000,
-				name: event.name
-			});
-		});
-
-		// Get elections.
-		form.elections.forEach(function(election) {
-			report.elections.push({
-				position: election.position,
-				stage: election.stage
-			});
-		});
-
-		// Get async data.
-		var async = 0;
-
-		// Get nominations.
-		form.nominations.forEach(function(nomination) {
-			async++;
-			User.findOne({ mes: nomination.recommender }, function(err, member) {
-				report.nominations.push({
-					name: nomination.name,
-					mes: nomination.mes.toUpperCase(),
-					location: nomination.domain,
-					email: nomination.email,
-					recommender: member.id,
-					reason: nomination.reason,
-					prestige: nomination.prestige
-				});
-				callback();
-			})
-		});
-
-		// Get DAs.
-		form.das.forEach(function(da) {
-			async++;
-			User.findOne({ mes: da.member }, function(err, member) {
-				report.das.push({
-					user: member.id,
-					text: da.action
-				});
-				callback();
-			});
-		});
-
-		// Run a callback when the report is ready.
-		var callback = function() {
-			async--;
-			if(async === 0) {
+		async.parallel([
+				function(callback) {
+					async.each(form.events, function(event, done) {
+						report.upcoming.push({
+							date: Date.parse(event.date) + 18000000,
+							name: event.name
+						});
+						done();
+					}, callback());
+				},
+				function(callback) {
+					async.each(form.elections, function(election, done) {
+						report.elections.push({
+							position: election.position,
+							stage: election.stage
+						});
+						done();
+					}, callback());
+				},
+				function(callback) {
+					async.each(form.nominations, function(nomination, done) {
+						User.findOne({ mes: nomination.recommender }, function(err, member) {
+							if(err) {
+								done(err);
+							}
+							report.nominations.push({
+								name: nomination.name,
+								mes: nomination.mes.toUpperCase(),
+								location: nomination.domain,
+								email: nomination.email,
+								recommender: member.id,
+								reason: nomination.reason,
+								prestige: nomination.prestige
+							});
+							done();
+						});
+					}, callback());
+				},
+				function(callback) {
+					async.each(form.das, function(da, done) {
+						User.findOne({ mes: da.member }, function(err, member) {
+							report.das.push({
+								user: member.id,
+								text: da.action
+							});
+							done();
+						});
+					}, callback());					
+				},	
+			],
+			function(err) {
 				log('Creating report...');
+				if(err) {
+					log("ERROR: " + err);
+					return;
+				}
+				log(report);
+				exports.add(req, res);
+				return;
 				Report.create(report, function(err, report) {
 					if(err) {
 						log("ERROR: "+ err);
@@ -277,7 +311,11 @@ exports.submit = function(req, res) {
 						res.redirect('/report');
 					}					
 				});
-			}		
-		}		
+			}
+		);	
 	}
 }
+
+/**
+ * Utility functions.
+ */

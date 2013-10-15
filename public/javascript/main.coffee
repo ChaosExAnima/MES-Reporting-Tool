@@ -21,18 +21,22 @@ $(document).ready ->
 		$(this).parent().toggleClass('close')
 		return
 
-	$('fieldset > a.submit').click ->
+	$('fieldset > a.btn-green').click ->
 		parent = $(this).parent()
 		clone = $('.template', parent).clone()
 		i = $('div', parent).length - 1
 		$('input, select', clone).removeAttr('disabled').each ->
 			name = $(this).attr('name').replace('[i]', '['+i+']')
 			$(this).attr('name', name)
+			if $(this).hasClass "auto-complete-mes"
+				$(this).autocomplete 
+					source: "/user/search/"
+					minLength: 3
 			return
 		clone.removeClass('template').insertBefore($(this))
 		return
 
-	$('fieldset').on "click", "a.cancel", ->
+	$('fieldset').on "click", "a.btn-red", ->
 		$(this).parent().remove()
 		return
 	return

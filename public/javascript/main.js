@@ -25,7 +25,7 @@ $(document).ready(function() {
   $('fieldset > legend').click(function() {
     $(this).parent().toggleClass('close');
   });
-  $('fieldset > a.submit').click(function() {
+  $('fieldset > a.btn-green').click(function() {
     var clone, i, parent;
     parent = $(this).parent();
     clone = $('.template', parent).clone();
@@ -34,10 +34,16 @@ $(document).ready(function() {
       var name;
       name = $(this).attr('name').replace('[i]', '[' + i + ']');
       $(this).attr('name', name);
+      if ($(this).hasClass("auto-complete-mes")) {
+        $(this).autocomplete({
+          source: "/user/search/",
+          minLength: 3
+        });
+      }
     });
     clone.removeClass('template').insertBefore($(this));
   });
-  $('fieldset').on("click", "a.cancel", function() {
+  $('fieldset').on("click", "a.btn-red", function() {
     $(this).parent().remove();
   });
 });

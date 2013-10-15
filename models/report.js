@@ -80,7 +80,8 @@ var ReportSchema = new Schema({
 	}],
 	das: [{
 		user: ObjectId,
-		text: String
+		text: String,
+		ref: ObjectId
 	}]
 })
 
