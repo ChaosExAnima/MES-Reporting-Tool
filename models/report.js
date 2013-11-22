@@ -83,6 +83,6 @@ var ReportSchema = new Schema({
 		text: String,
 		ref: ObjectId
 	}]
-})
+});
 
 mongoose.model('Report', ReportSchema)

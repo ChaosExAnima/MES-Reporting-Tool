@@ -1,0 +1,69 @@
+p
+
+if report.upcoming.length
+	fieldset
+		legend Upcoming Events
+		each upcoming in report.upcoming
+			p
+				= upcoming.date
+				| &nbsp;&ndash;&nbsp;
+				= upcoming.name
+
+if report.projects.length
+	fieldset
+		legend Current Projects
+		each project in report.projects
+			p= project
+
+fieldset
+	legend Finances
+	p= "Beginning Balance: $"+(report.finance.start/100)
+	br
+	p= "Total Income: $"+(report.finance.income.total/100)
+	p= "Site Fees: $"+(report.finance.income.sitefees/100)
+	p= "Donations: $"+(report.finance.income.donations/100)
+	br
+	p= "Total Expenses: $"+(report.finance.expenses.total/100)
+	p= "Food: $"+(report.finance.expenses.food/100)
+	p= "Space: $"+(report.finance.expenses.space/100)
+	p= "Props: $"+(report.finance.expenses.props/100)
+	p= "Bank fees: $"+(report.finance.expenses.fees/100)
+	br
+	p Ending Balance: 
+		span(class=(report.finance.end < report.finance.start) ? 'error' : '')= "$"+report.finance.end/100
+
+if report.elections.length
+	fieldset
+		legend Ongoing or Required Elections
+		each election in report.elections
+			p
+				= election.position
+				| &nbsp;&ndash;&nbsp;
+				= election.stage
+
+fieldset
+	legend Problems, Suggestions, and Comments
+	p= "Problems: "+report.comments.problems
+	p= "Suggestions: "+report.comments.suggestions
+	p= "Comments: "+report.comments.comments
+
+if report.nominations.length
+	fieldset
+		legend Prestige for Outside Members
+		each nomination in report.nominations
+			- var user = nomination.recommender;
+			p
+				a(href="mailto:"+nomination.email)= nomination.name + " (" + nomination.mes +")"
+				|  by 
+				a(href="/user/"+user.mes)= user.name.first + " " + user.name.last
+
+
+if report.das.length
+	fieldset
+		legend Disciplinary Actions
+		each action in report.das
+			- var user = action.user;
+			p
+				a(href="/user/"+user.mes)= user.name.first + " " + user.name.last
+				| &nbsp;&ndash;&nbsp;
+				= action.text

@@ -37,8 +37,9 @@ exports.route = function(app, path) {
 		field('das').array()
 	);
 
-	app.get(path+'/edit/([0-9a-z]+)/?$', this.edit);
-	app.get(path+'/view/([0-9a-z]+)/?$', this.view);
+	app.get(path+'/edit/:id([0-9a-z]+)/?$', this.edit);
+	app.get(path+'/view/:id([0-9a-z]+)/?$', this.view);
+	app.all(path+'/delete/:id([0-9a-z]+)/?$', this.delete);
 	app.get(path+'/add', this.add);
 	app.post(path+'/add', validation, this.submit);
 	app.get(path+'/:id([0-9a-z]+)/?$', this.detail);
@@ -66,7 +67,7 @@ exports.index = function(req, res) {
  * Shows report detail.
  */
 exports.detail = function(req, res) {
-	Report.findOne({ id: req.param.id }, function(err, data) {
+	Report.findById(req.param('id'), function(err, data) {
 		if(err) {
 			log(err);
 			res.redirect('/reports');
@@ -85,8 +86,7 @@ exports.detail = function(req, res) {
 				async.parallel([
 					function(callback) {
 						async.each(data.nominations, function(item, done) {
-							User.findOne({ _id : item.recommender }, function(err, user) {
-								log("Nominations: Found "+user.name.first+" "+user.name.last);
+							User.findById(item.recommender, function(err, user) {
 								item.recommender = user;
 								done();
 							});
@@ -94,15 +94,19 @@ exports.detail = function(req, res) {
 					},
 					function(callback) {
 						async.each(data.das, function(item, done) {
-							User.findOne({ _id : item.user }, function(err, user) {
-								log("DAs: Found "+user.name.first+" "+user.name.last);
+							User.findById(item.user, function(err, user) {
 								item.user = user;
 								done();
 							});
 						}, callback);
+					},
+					function(callback) {
+						Prestige.find({ report: req.param('id') }, null, { sort: { user: 1 } }, function(err, prestige) {
+							data.prestige = prestige;
+							callback();
+						});
 					}],
 					function() {
-						log(data);
 						res.render('reports/detail', {title: 'Report for '+dateformat(data.date, 'yyyy-mm'), report: data, users: users});
 					}
 				)				
@@ -194,6 +198,27 @@ exports.edit = function(req, res) {
  */
 exports.view = function(req, res) {
 
+}
+
+
+/**
+ * Deletes a report.
+ */
+exports.delete = function(req, res) {
+	Report.findById(req.param('id'), function(err, report) {
+		if(err) {
+			log(err);
+			res.redirect('/reports');
+		} else {
+			// Show confirmation message.
+			if(!req.param('confirm')) {
+				res.render('reports/delete', { title: 'Delete Report', id: req.param('id') });
+			} else { // Delete the report.
+				report.remove();
+				res.redirect('/report');
+			}
+		}
+	});
 }
 
 
@@ -296,11 +321,9 @@ exports.submit = function(req, res) {
 				log('Creating report...');
 				if(err) {
 					log("ERROR: " + err);
+					exports.add(req, res);
 					return;
 				}
-				log(report);
-				exports.add(req, res);
-				return;
 				Report.create(report, function(err, report) {
 					if(err) {
 						log("ERROR: "+ err);

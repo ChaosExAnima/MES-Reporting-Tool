@@ -172,7 +172,8 @@ a [class*=" icon-"] {
 .hide,
 [class*=" icon-"],
 .hide,
-.report-add .template {
+.report-add .template,
+.report-detail-prestige .template {
   display: none;
 }
 .icon-muted {
@@ -1868,6 +1869,24 @@ footer p {
 .error {
   color: #ed0808;
 }
+.tabs a {
+  display: inline-block;
+  background-color: #eeeecb;
+  color: #6e6e25;
+  padding: 0.25em 0.5em;
+  border: 1px solid #b8b83d;
+  margin-right: 1em;
+}
+.tabs a.selected,
+.tabs a:hover {
+  text-decoration: none;
+  background-color: #d5d582;
+  color: #000;
+  border-color: #6e6e25;
+}
+.tabs a:last-child {
+  margin-right: 0;
+}
 .button,
 .btn-red,
 .btn-green,
@@ -1940,7 +1959,8 @@ footer p {
 }
 .hide,
 .start-closed,
-.report-add .template {
+.report-add .template,
+.report-detail-prestige .template {
   display: none;
 }
 .user-prestige .num {
@@ -1955,7 +1975,8 @@ footer p {
 .user-index th a.selected {
   text-decoration: underline;
 }
-.report-add fieldset > div {
+.report-add fieldset > div,
+.report-detail-prestige fieldset > div {
   padding-bottom: 1em;
   border-bottom: 1px solid #d5d582;
   margin: 1em 0;

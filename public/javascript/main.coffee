@@ -3,8 +3,6 @@ delay = (ms, func) -> setTimeout func, ms
 
 log 'Started!'
 
-
-
 $(document).ready -> 
 	$('fieldset').each ->
 		ele = $ this
@@ -38,5 +36,14 @@ $(document).ready ->
 
 	$('fieldset').on "click", "a.btn-red", ->
 		$(this).parent().remove()
+		return
+
+	$('.tabs a').on "click", (event) ->
+		event.preventDefault()
+		if !$(this).hasClass "selected"
+			$(this).siblings(".selected").removeClass("selected")
+			$(this).addClass("selected")
+			$('.tab').hide()
+			$( $(this).attr('href') ).show()
 		return
 	return

@@ -13,6 +13,7 @@ var mongoose = require('mongoose'),
 var PrestigeSchema = new Schema({
 	user: { type: ObjectId, index: true },
  	date: { type: Number, index: true },
+ 	report: { type: ObjectId, index: true },
  	description: String,
  	category: String,
  	g: Number,
