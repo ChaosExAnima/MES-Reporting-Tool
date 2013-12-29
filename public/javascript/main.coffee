@@ -1,9 +1,29 @@
 log = console.log.bind console
 delay = (ms, func) -> setTimeout func, ms
 
-log 'Started!'
-
 $(document).ready -> 
+	# User MES num autocomplete
+	$('input.auto-complete-mes').autocomplete
+		source: "/user/search/"
+		minLength: 3
+
+	# Prestige award autocomplete
+	$('input.auto-complete-prestige').autocomplete
+		minLength: 2
+		source: "/prestige/search/"
+		select: (event, ui) ->
+			$('[name="category"]').val(ui.item.category)
+			$('[name="amount"]').val(ui.item.amount)
+			return
+
+	$('.drop-zone').sortable({
+		placeholder: "drop-placeholder",
+		connectWith: ".drop-zone",
+		receive: updatePrestige
+	});
+	$('.drop-zone').disableSelection();
+
+	# Fieldset functionality
 	$('fieldset').each ->
 		ele = $ this
 		if ele.hasClass 'close'
@@ -23,7 +43,7 @@ $(document).ready ->
 		parent = $(this).parent()
 		clone = $('.template', parent).clone()
 		i = $('div', parent).length - 1
-		$('input, select', clone).removeAttr('disabled').each ->
+		$('input, select, textarea', clone).removeAttr('disabled').each ->
 			name = $(this).attr('name').replace('[i]', '['+i+']')
 			$(this).attr('name', name)
 			if $(this).hasClass "auto-complete-mes"
@@ -38,6 +58,7 @@ $(document).ready ->
 		$(this).parent().remove()
 		return
 
+	# Tab functionality
 	$('.tabs a').on "click", (event) ->
 		event.preventDefault()
 		if !$(this).hasClass "selected"
@@ -46,4 +67,18 @@ $(document).ready ->
 			$('.tab').hide()
 			$( $(this).attr('href') ).show()
 		return
+	return
+
+# Updated assigning and removing prestige
+updatePrestige = (event, ui) ->
+	report = $(this).data('id') || false
+	data = 
+		id: ui.item.data('id')
+
+	if report
+		data.report = report
+
+	$.post('/prestige/assign', data, (data) ->
+		log data
+	)
 	return

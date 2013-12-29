@@ -1,0 +1,19 @@
+mixin prestige(item)
+	- if(item)
+		li(data-id=item.id)
+			a(href="/user/"+item.user.mes)= item.user.name.first + " " + item.user.name.last
+			| :&nbsp;
+			= item.description
+			| , 
+			= item.g
+			| G
+
+p Assigned Prestige
+ul.drop-zone#assigned(data-id=""+report._id)
+	- for item in claimed
+		+prestige(item)
+
+p Unassigned Prestige
+ul.drop-zone#unassigned
+	- for item in unclaimed
+		+prestige(item)

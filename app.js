@@ -66,21 +66,30 @@ db.once('open', function callback () {
 function setupRoutes() {
 	var statics = require('./controllers/statics.js'),
 		users = require('./controllers/users.js'),
-		reports = require('./controllers/reports.js');
+		reports = require('./controllers/reports.js'),
+		prestige = require('./controllers/prestige.js');
 
 	log('Configuring routes.');
 
 	// Set up basic template variables.
 	app.locals({
-		nav: config.nav,
-		flash: false
+		nav: config.nav
 	});
 
 	app.use(function(req, res, next) {
 		app.locals.cururl = req.url.match(/^(\/[a-z]*)/)[0];
+		
+		var chunks = req.url.split('/').slice(1);
+		if(chunks.length > 1) {
+			chunks = chunks.slice(0, -1);
+		}
+		app.locals.section = "section-"+chunks.join('-');
+
+		app.locals.flash = false;
 		next();
 	});
 
+	// Static pages.
 	app.get('/', statics.home);
 
 	// User Pages
@@ -88,10 +97,19 @@ function setupRoutes() {
 
 	// Reports pages
 	app = reports.route(app, '/report');
+
+	// Prestige pages
+	app = prestige.route(app, '/prestige');
 };
 
-function setupConfig() {
-	app.use(express.session({
+// Sets a global function.
+setFlash = function(message, type) {
+	if(!type) {
+		type = "notification";
+	}
 
-	}));
-}
+	app.locals.flash = {
+		type: type,
+		text: message
+	};
+};

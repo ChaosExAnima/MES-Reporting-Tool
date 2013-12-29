@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
 
 var ReportSchema = new Schema({
 	date: { type: Number, index: true },
-	status: { type: String, enum: ['Created', 'Ready', 'Published'], default: 'Created' },
+	status: { type: String, enum: ['Created', 'Published'], default: 'Created' },
 	counts: {
 		members: Number,
 		trial: Number,
@@ -20,11 +20,11 @@ var ReportSchema = new Schema({
 		total: Number
 	},
 	staff: {
-		dc: ObjectId,
-		adcs: [ObjectId],
-		dst: ObjectId,
-		adsts: [ObjectId],
-		vsts: [ObjectId]
+		dc: { type: ObjectId, ref: 'User' },
+		adcs: [{ type: ObjectId, ref: 'User' }],
+		dst: { type: ObjectId, ref: 'User' },
+		adsts: [{ type: ObjectId, ref: 'User' }],
+		vsts: [{ type: ObjectId, ref: 'User' }]
 	},
 	upcoming: [{
 		name: String,
@@ -49,8 +49,7 @@ var ReportSchema = new Schema({
 	},
 	elections: [{
 		position: String,
-		stage: String,
-		date: Number
+		stage: String
 	}],
 	comments: {
 		problems: String,
@@ -58,31 +57,39 @@ var ReportSchema = new Schema({
 		comments: String
 	},
 	members: {
-		fresh: [ObjectId],
-		transferred: [ObjectId],
-		mc9: [ObjectId],
-		prestige: [ObjectId],
-		regional: [ObjectId],
-		mcbump: [ObjectId],
+		fresh: [Object],
+		transferred: [Object],
+		mc9: [Object],
+		prestige: [Object],
+		regional: [Object],
+		national: [Object],
+		mcbump: [Object],
 	},
 	memberlist: [{
-		user: ObjectId,
-		awards: [ObjectId]
+		user: Object,
+		awards: [{ type: ObjectId, ref: 'Prestige' }]
 	}],
 	nominations: [{
 		name: String,
 		mes: { type: String, match: /^[A-Z]{2}[0-9]{10}$/ },
 		location: String,
 		email: String,
-		recommender: ObjectId,
+		recommender: { type: ObjectId, ref: 'User' },
 		reason: String,
 		prestige: String
 	}],
 	das: [{
-		user: ObjectId,
+		user: { type: ObjectId, ref: 'User' },
 		text: String,
-		ref: ObjectId
+		notes: String
 	}]
 });
+
+ReportSchema.statics = {
+	findByDate: function(year, month, callback) {
+		var date = new Date(year, month).getTime();
+		return this.findOne({ date: date }, callback);
+	}
+};
 
 mongoose.model('Report', ReportSchema)

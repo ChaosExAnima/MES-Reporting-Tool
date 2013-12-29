@@ -10,15 +10,17 @@ block content
 	p= 'Totals: ' + user.prestige.g + 'G, ' + user.prestige.r + 'R, ' + user.prestige.n + 'N, ' + user.prestige.gt + 'GT'
 	if user.is_expired
 		p.error Expired 
-			span(class='date')= user.expire
+			span(class='date')= dateformat(user.expire, "yyyy-mm-dd")
 	else
 		p Expires 
-			span(class='date')= user.expire
+			span(class='date')= dateformat(user.expire, "yyyy-mm-dd")
 
 	if user.positions.length
 		p Positions: 
-			each pos, i in user.positions_formatted
-				a(href="")= pos
+			each pos, i in user.positions
+				= pos.name
+				- if(pos.ends)
+					= dateformat(pos.ends, " (yyyy-mm-dd)")
 				= (i == user.positions.length-1) ? '' : ', '
 
 	h3 Standards
@@ -52,7 +54,7 @@ block content
 			tbody
 			each award in awards
 				tr
-					td= award.date
+					td= dateformat(award.date, "yyyy-mm")
 					td= award.description
 					td= award.category
 					td.num= award.g

@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+	form(action="/prestige", method="post")
+		label(class=check('user')) Member
+			input(type="text", name="user", value=fields.user, class="auto-complete-mes", tabindex="1", autofocus)
+
+		label(class="backdate") Date
+			select(name="date[year]")
+				- for year in data.years
+					option(value=year, selected=(fields.date.year == year) ? 'selected' : null)= year
+			select(name="date[month]")
+				- for month, index in data.months
+					option(value=index, selected=(fields.date.month == index) ? 'selected' : null)= month
+
+		label(class=check('description')) Description
+			input(type="text", name="description", value=fields.description, class="auto-complete-prestige", tabindex="2")
+
+		label Category
+			select(name="category", tabindex="4")
+				- for category in categories
+					option(value=category.value, selected=(fields.category == category.value) ? 'selected' : null)=category.name
+
+		label(class=check('amount')) Amount
+			input(type="number", name="amount", value=fields.amount, tabindex="5")
+
+		input(type="submit", class="btn-green", value="Create", tabindex="3")

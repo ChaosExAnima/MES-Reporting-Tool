@@ -17,20 +17,20 @@ if report.projects.length
 
 fieldset
 	legend Finances
-	p= "Beginning Balance: $"+(report.finance.start/100)
+	p= "Beginning Balance: $"+report.finance.start
 	br
-	p= "Total Income: $"+(report.finance.income.total/100)
-	p= "Site Fees: $"+(report.finance.income.sitefees/100)
-	p= "Donations: $"+(report.finance.income.donations/100)
+	p= "Total Income: $"+report.finance.income.total
+	p= "Site Fees: $"+report.finance.income.sitefees
+	p= "Donations: $"+report.finance.income.donations
 	br
-	p= "Total Expenses: $"+(report.finance.expenses.total/100)
-	p= "Food: $"+(report.finance.expenses.food/100)
-	p= "Space: $"+(report.finance.expenses.space/100)
-	p= "Props: $"+(report.finance.expenses.props/100)
-	p= "Bank fees: $"+(report.finance.expenses.fees/100)
+	p= "Total Expenses: $"+report.finance.expenses.total
+	p= "Food: $"+report.finance.expenses.food
+	p= "Space: $"+report.finance.expenses.space
+	p= "Props: $"+report.finance.expenses.props
+	p= "Bank fees: $"+report.finance.expenses.fees
 	br
 	p Ending Balance: 
-		span(class=(report.finance.end < report.finance.start) ? 'error' : '')= "$"+report.finance.end/100
+		span(class=(report.finance.end < report.finance.start) ? 'error' : '')= "$"+report.finance.end
 
 if report.elections.length
 	fieldset
@@ -53,7 +53,10 @@ if report.nominations.length
 		each nomination in report.nominations
 			- var user = nomination.recommender;
 			p
-				a(href="mailto:"+nomination.email)= nomination.name + " (" + nomination.mes +")"
+				- if(nomination.email)
+					a(href="mailto:"+nomination.email)= nomination.name + " (" + nomination.mes +")"
+				- else
+					= nomination.name + " (" + nomination.mes +")"
 				|  by 
 				a(href="/user/"+user.mes)= user.name.first + " " + user.name.last
 

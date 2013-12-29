@@ -10,7 +10,8 @@
 	"nav" : {
 		"Home" : "/",
 		"Users" : "/user",
-		"Reports" : "/report"
+		"Reports" : "/report",
+		"Prestige" : "/prestige"
 	},
 	"standards" : [
 		"Membership",
@@ -32,26 +33,27 @@
 		"Membership Chapter 5",
 		"Membership Chapter 6",
 		"Membership Chapter 7",
-		"Membership Chapter 8"
+		"Membership Chapter 8",
+		"Coordinator Process"
 	],
-	"categories" : [
-		{
+	"categories" : {
+		"admin" : {
 			"name" : "Administration",
 			"cap"  : 80
 		},
-		{
+		"game" : {
 			"name" : "Non-Administrative Game Support",
 			"cap"  : 50
 		},
-		{
+		"social" : {
 			"name" : "Social/Non-Game Support",
 			"cap"  : 50
 		},
-		{
+		"misc" : {
 			"name" : "Miscellaneous",
 			"cap"  : 0
 		}
-	],
+	},
 	"venues" : [
 		"Awakening",
 		"Accord",

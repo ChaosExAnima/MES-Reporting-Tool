@@ -1,5 +1,7 @@
 var dateformat = require('dateformat'),
 	mongoose = require('mongoose'),
+	async = require('async'),
+	underscore = require('underscore'),
 	User = mongoose.model('User'),
 	Prestige = mongoose.model('Prestige');
 
@@ -73,25 +75,39 @@ exports.detail = function(req, res) {
 	var id = req.params.id
 
 	if(id) {
-		User.findOne({ mes: id }, function(err, doc) {
-			var user = doc.toObject(),
-				title = 'User Detail: ' + user.name.last + ', ' + user.name.first;
-			user.is_expired = user.expire <= new Date().getTime();
-			user.expire = dateformat(user.expire, "yyyy-mm-dd");
-			user.positions_formatted = [];
-			user.positions.forEach(function(position) {
-				user.positions_formatted.push( (position.ends !== null) ? position.name + dateformat(position.ends, " (yyyy-mm-dd)") : position.name );
-			});
- 
-			// Load awards here.
-			Prestige.find({ user: doc._id }, null, { sort: { date: 1 } }, function(err, awards) {
-				for (var i = 0; i < awards.length; i++) {
-					awards[i] = awards[i].toObject();
-					awards[i].date = dateformat(awards[i].date, "yyyy-mm-dd");
-				};
+		var user, awards;
 
-				res.render('users/detail', { title: title, user: user, awards: awards });
-			});
+		async.series([
+			// Get the user data.
+			function(callback) {
+				User
+				.findByMes(id)
+				.exec(function(err, data) {
+					user = data.toObject();
+					user.is_expired = user.expire <= new Date().getTime();
+					callback(err);
+				});
+			},
+
+			// Get the prestige data.
+			function(callback) {
+				Prestige
+				.findByUser(user._id)
+				.sort('date')
+				.exec(function(err, data) {
+					awards = data;
+					callback(err);
+				});
+			}
+		], function(err) {
+			if(err) {
+				log(err);
+				return;
+			}
+
+			var title = 'User Detail: ' + user.name.last + ', ' + user.name.first;
+
+			res.render('users/detail', { title: title, user: user, awards: awards, dateformat: dateformat });
 		});
 	} else {
 		res.redirect('/user')

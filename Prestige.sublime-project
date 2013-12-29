@@ -2,9 +2,21 @@
 	"folders":
 	[
 		{
-			"path": ".",
-			"folder_exclude_patterns": ["node_modules"],
-			"file_exclude_patterns": ["*.sublime-workspace"]
+			"file_exclude_patterns":
+			[
+				"*.sublime-workspace",
+				".nodemonignore"
+			],
+			"folder_exclude_patterns":
+			[
+				"node_modules"
+			],
+			"follow_symlinks": true,
+			"path": "/home/ephraim/websites/prestige"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "node_modules"
 		}
 	]
 }

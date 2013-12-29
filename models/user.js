@@ -41,8 +41,14 @@ var UserSchema = new Schema({
     disciplinaryactions: [{
         name: String,
         date: Number,
-        officer: ObjectId
+        officer: { type: ObjectId, ref: 'User' }
     }]
 });
+
+UserSchema.statics = {
+    findByMes: function(mes, callback) {
+        return this.findOne({ mes: mes }, callback);
+    }
+};
 
 mongoose.model('User', UserSchema)

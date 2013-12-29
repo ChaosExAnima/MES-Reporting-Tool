@@ -21,10 +21,10 @@ html
 							- else
 								a(href='#{url}', title='#{name}') #{name}
 
-		.container
+		div(class="container "+section)
 			- if(flash)
-				div(class="msg-box "+"warning") 
-					p THERE WAS AN ERROR!!!
+				div(class="msg-box "+flash.type) 
+					p= flash.text
 
 			block content
 

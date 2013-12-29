@@ -8,7 +8,10 @@ block content
 		a(href="#prestige") Prestige
 
 	section#info.tab
-		include detail_info
+		include partials/detail_info
 
 	section#prestige.hide.tab
-		include detail_prestige
+		include partials/detail_prestige
+
+	a(href="/report/edit/"+report._id).btn-yellow Edit
+	a(href="/report/delete/"+report._id).btn-red Delete

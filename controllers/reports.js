@@ -3,7 +3,9 @@ var mongoose = require('mongoose'),
 	async = require('async'),
 	Report = mongoose.model('Report'),
 	User = mongoose.model('User'),
-	Prestige = mongoose.model('Prestige');
+	Prestige = mongoose.model('Prestige'),
+	underscore = require('underscore'),
+	helper = require('./helpers');
 
 
 /**
@@ -20,24 +22,26 @@ exports.route = function(app, path) {
 
 	var validation = form(
 		field('date').required().isDate(),
-		field('events').array(),
+		field('upcoming').array(),
 		field('projects').array(),
-		field('finance.start').required().isNumeric().toFloat(),
-		field('finance.sites').isNumeric().toFloat(),
-		field('finance.donations').isNumeric().toFloat(),
-		field('finance.food').isNumeric().toFloat(),
-		field('finance.space').isNumeric().toFloat(),
-		field('finance.prop').isNumeric().toFloat(),
-		field('finance.bank').isNumeric().toFloat(),
+		field('finance.start').required().isNumeric().toFloat().custom(helper.removeInvalidNumber),
+		field('finance.income.sitefees').isNumeric().toFloat().custom(helper.removeInvalidNumber),
+		field('finance.income.donations').isNumeric().toFloat().custom(helper.removeInvalidNumber),
+		field('finance.expenses.food').isNumeric().toFloat().custom(helper.removeInvalidNumber),
+		field('finance.expenses.space').isNumeric().toFloat().custom(helper.removeInvalidNumber),
+		field('finance.expenses.props').isNumeric().toFloat().custom(helper.removeInvalidNumber),
+		field('finance.expenses.fees').isNumeric().toFloat().custom(helper.removeInvalidNumber),
 		field('elections').array(),
-		field('problems'),
-		field('suggestions'),
-		field('comments'),
+		field('comments.problems'),
+		field('comments.suggestions'),
+		field('comments.comments'),
+		field('memberList').array(),
 		field('nominations').array(),	
 		field('das').array()
 	);
 
 	app.get(path+'/edit/:id([0-9a-z]+)/?$', this.edit);
+	app.post(path+'/edit/:id([0-9a-z]+)/?$', validation, this.submit);
 	app.get(path+'/view/:id([0-9a-z]+)/?$', this.view);
 	app.all(path+'/delete/:id([0-9a-z]+)/?$', this.delete);
 	app.get(path+'/add', this.add);
@@ -50,13 +54,46 @@ exports.route = function(app, path) {
 
 
 /**
+ * Local Variables.
+ */
+// Default form fields.
+var defaults = {
+	date: dateformat('yyyy-mm'),
+	upcoming: [],
+	projects: [],
+	finance: {
+		start: "",
+		income: {
+			sitefees: "",
+			donations: ""
+		},
+		expenses: {
+			food: "",
+			space: "",
+			props: "",
+			fees: ""
+		}
+	},
+	elections: [],
+	comments: {
+		problems: "",
+		suggestions: "",
+		comments: "",
+	},
+	memberList: [],
+	nominations: [],
+	das: []
+};
+
+
+/**
  * Lists reports.
  */
 exports.index = function(req, res) {
-	Report.find({}, null, { sort: { 'date' : 1 } }, function(err, reports) {
+	Report.find({}, null, { sort: { 'date' : -1 } }, function(err, reports) {
 		for (var i = 0; i < reports.length; i++) {
 			reports[i] = reports[i].toObject();
-			reports[i].date = dateformat(reports.date, 'yyyy-mm-dd');
+			reports[i].date = dateformat(reports[i].date, 'yyyy-mm');
 		};
 		res.render('reports/index', {title: 'Reports', reports: reports})
 	});	
@@ -67,51 +104,50 @@ exports.index = function(req, res) {
  * Shows report detail.
  */
 exports.detail = function(req, res) {
-	Report.findById(req.param('id'), function(err, data) {
-		if(err) {
-			log(err);
-			res.redirect('/reports');
-		} else {
-			data = data.toObject();
-			data.date = dateformat(data.date, 'mmmm yyyy');
+	var report, claimed, unclaimed;
 
-			// Format
-			data.upcoming.forEach(function(election) {
-				election.date = dateformat(election.date, 'yyyy-mm-dd');
+	async.parallel([
+		// Get the report data
+		function(callback) {
+			Report
+			.findById(req.params.id)
+			.populate('nominations.recommender das.user')
+			.exec(function(err, data) {
+				report = _parseReportData(data.toObject());
+				callback(err);
 			});
-
-			User.find({}, function(err, users) {
-				// log(users.length);
-
-				async.parallel([
-					function(callback) {
-						async.each(data.nominations, function(item, done) {
-							User.findById(item.recommender, function(err, user) {
-								item.recommender = user;
-								done();
-							});
-						}, callback);
-					},
-					function(callback) {
-						async.each(data.das, function(item, done) {
-							User.findById(item.user, function(err, user) {
-								item.user = user;
-								done();
-							});
-						}, callback);
-					},
-					function(callback) {
-						Prestige.find({ report: req.param('id') }, null, { sort: { user: 1 } }, function(err, prestige) {
-							data.prestige = prestige;
-							callback();
-						});
-					}],
-					function() {
-						res.render('reports/detail', {title: 'Report for '+dateformat(data.date, 'yyyy-mm'), report: data, users: users});
-					}
-				)				
+		},
+		// Get the report prestige
+		function(callback) {
+			Prestige
+			.findByReport(req.params.id)
+			.populate('user', 'name.first name.last mes')
+			.exec(function(err, data) {
+				claimed = data;
+				callback(err);
+			});
+		},
+		// Get the unclaimed prestige
+		function(callback) {
+			Prestige
+			.findUnreported()
+			.populate('user', 'name.first name.last mes')
+			.exec(function(err, data) {
+				unclaimed = data;
+				callback(err);
 			});
 		}
+	], function(err) {
+		if(err) {
+			log(err);
+			setFlash("There is an error with the report.", "error");
+			res.redirect('reports/');
+		}
+
+		log(claimed);
+
+		var title = 'Report for '+report.date;
+		res.render('reports/detail', {title: title, report: report, claimed: claimed, unclaimed: unclaimed});
 	});
 }
 
@@ -122,66 +158,35 @@ exports.detail = function(req, res) {
 exports.add = function(req, res) {
 	var fields = {},
 		form = req.form,
-		err = function(field) { return form.getErrors(field).length ? 'error' : '';	},
 		viewdata = {
 			positions: ['DST', 'DC'],
 			stages: ['Upcoming', 'Application', 'Q/A', 'Voting']
-		};
+		},
+		errors = [];
 		
-	config.venues.forEach(function(venue) {
-		viewdata.positions.push('VST '+venue);		
+	underscore.each(config.venues, function(venue) {
+		viewdata.positions.push('VST '+venue);
 	});
 
 	if(typeof form === 'undefined') { // Initial creation.
 		var date = new Date();
 		date.setMonth( date.getMonth() === 0 ? 11 : date.getMonth() -1 );
 
-		fields = {
-			date: [dateformat(date, 'yyyy-mm'), false],
-			events: [],
-			projects: [],
-			finance: {
-				start: ['', false],
-				sites: ['', false],
-				donations: ['', false],
-				food: ['', false],
-				space: ['', false],
-				prop: ['', false],
-				bank: ['', false]
-			},
-			elections: [],
-			problems: ['', false],
-			suggestions: ['', false],
-			comments: ['', false],
-			nominations: [],
-			das: []
-		};
-
-		// Get the old stuff here.
+		// Set default fields.
+		fields = underscore.defaults({ date: dateformat(date, 'yyyy-mm') }, defaults);
 	} else { // Submitted.
-		fields = {
-			date: [form.date, err('date')],
-			events: form.events,
-			projects: form.projects,
-			finance: {
-				start: [form.finance.start||0, err('finance.start')],
-				sites: [form.finance.sites||0, err('finance.sites')],
-				donations: [form.finance.donations||0, err('finance.donations')],
-				food: [form.finance.food||0, err('finance.food')],
-				space: [form.finance.space||0, err('finance.space')],
-				prop: [form.finance.prop||0, err('finance.prop')],
-				bank: [form.finance.bank||0, err('finance.bank')]
-			},
-			elections: form.elections,
-			problems: [form.problems, err('problems')],
-			suggestions: [form.suggestions, err('suggestions')],
-			comments: [form.comments, err('comments')],
-			nominations: form.nominations,
-			das: form.das
-		};
+		fields = underscore.defaults(form, defaults);
+		errors = underscore.keys(form.getErrors());
 	}
 
-	res.render('reports/add', {title: 'New Report', fields: fields, data: viewdata });
+	var check = function(field) {
+		if(errors.indexOf(field) !== -1) {
+			return "error";
+		}
+		return "";
+	};
+
+	res.render('reports/add', {title: 'New Report', fields: fields, data: viewdata, check: check });
 }
 
 
@@ -189,7 +194,54 @@ exports.add = function(req, res) {
  * Edits a report.
  */
 exports.edit = function(req, res) {
+	Report
+	.findById(req.params.id)
+	.populate('nominations.recommender das.user')
+	.exec(function(err, report) {
+		if(err) {
+			log(err);
+			setFlash("Could not find report.", "error");
+			res.redirect('/report');
+		} else {
+			var fields = {},
+				form = req.form,
+				viewdata = {
+					positions: ['DST', 'DC'],
+					stages: ['Upcoming', 'Application', 'Q/A', 'Voting']
+				},
+				errors = [];
 
+			underscore.each(config.venues, function(venue) {
+				viewdata.positions.push('VST '+venue);
+			});
+
+			report = report.toObject();
+			_parseReportData(report);
+
+			underscore.each(report.nominations, function(item) {
+				item.recommender = item.recommender.mes;
+			});
+			underscore.each(report.das, function(item) {
+				item.user = item.user.mes;
+			});
+
+			if(typeof form === "undefined") {
+				fields = underscore.defaults(report, defaults);
+			} else {
+				fields = underscore.defaults(form, report, defaults);
+				errors = underscore.keys(form.getErrors());
+			}
+
+			var check = function(field) {
+				if(errors.indexOf(field) !== -1) {
+					return "error";
+				}
+				return "";
+			};
+
+			res.render('reports/edit', {title: 'Editing report for '+report.date, fields: fields, data: viewdata, check: check });
+		}
+	});
 }
 
 
@@ -205,16 +257,18 @@ exports.view = function(req, res) {
  * Deletes a report.
  */
 exports.delete = function(req, res) {
-	Report.findById(req.param('id'), function(err, report) {
+	Report.findById(req.params.id, function(err, report) {
 		if(err) {
 			log(err);
-			res.redirect('/reports');
+			setFlash("Could not find report.", "error");
+			res.redirect('/report');
 		} else {
 			// Show confirmation message.
 			if(!req.param('confirm')) {
-				res.render('reports/delete', { title: 'Delete Report', id: req.param('id') });
+				res.render('reports/delete', { title: 'Delete Report', id: req.params.id });
 			} else { // Delete the report.
 				report.remove();
+				setFlash("Report successfully deleted.");
 				res.redirect('/report');
 			}
 		}
@@ -227,118 +281,195 @@ exports.delete = function(req, res) {
  */
 exports.submit = function(req, res) {
 	if(!req.form.isValid) {
-		exports.add(req, res);
+		setFlash("Please correct the errors below.", "warning");
+
+		if(req.params.id) {
+			exports.edit(req, res);
+		} else {
+			exports.add(req, res);
+		}
 	} else {
-		var form = req.form;
+		var report = req.form,
+			parseDollars = function(val, key, list) {
+				list[key] = parseInt( val * 100 );
+			},
+			sumDollars = function(total, num) {
+				return total + num;
+			},
+			undoReport = function(report) {
+				underscore.each(report.nominations, function(item) {
+					item.recommender = item.oldRecommender;
+				});
+				underscore.each(report.das, function(item) {
+					item.user = item.oldUser;
+				});
+			};
+
+		// Sets the date.
+		report.date = _parseDate(report.date);
+
+		// Finance manipulation.
+		var fin = report.finance;
 
 		// Rounds all of the finance info.
-		for(var key in form.finance) {
-			form.finance[key] = parseInt(form.finance[key] * 100);
-		}
+		fin.start = parseInt( fin.start * 100 );
+		underscore.each(fin.income, parseDollars);
+		underscore.each(fin.expenses, parseDollars);
 
-		// Add/update report.
-		var report = {
-			date: Date.parse(form.date) + 18000000,
-			upcoming: [],
-			finance: {
-				start: form.finance.start,
-				end: (form.finance.start + form.finance.sites + form.finance.donations) - (form.finance.food + form.finance.space + form.finance.prop + form.finance.bank),
-				income: {
-					total: form.finance.sites + form.finance.donations,
-					sitefees: form.finance.sites,
-					donations: form.finance.donations,
-				},
-				expenses: {
-					total: form.finance.food + form.finance.space + form.finance.prop + form.finance.bank,
-					food: form.finance.food,
-					space: form.finance.space,
-					props: form.finance.prop,
-					fees: form.finance.bank,
-				}
-			},
-			elections: [],
-			projects: form.projects,
-			comments: {
-				problems: form.problems,
-				suggestions: form.suggestions,
-				comments: form.comments
-			},
-			nominations: [],
-			das: []
-		};
+		// Generates the totals.
+		fin.income.total = underscore.reduce(fin.income, sumDollars);
+		fin.expenses.total = underscore.reduce(fin.expenses, sumDollars);
+		fin.end = fin.start + fin.income.total - fin.expenses.total;
 
+		// Runs a parallel task.
 		async.parallel([
+				// Sets the event dates.
 				function(callback) {
-					async.each(form.events, function(event, done) {
-						report.upcoming.push({
-							date: Date.parse(event.date) + 18000000,
-							name: event.name
-						});
+					async.each(report.upcoming, function(item, done) {
+						item.date = _parseDate(item.date);
 						done();
-					}, callback());
+					}, callback);
 				},
+
+				// Sets the member IDs for the prestige nominations.
 				function(callback) {
-					async.each(form.elections, function(election, done) {
-						report.elections.push({
-							position: election.position,
-							stage: election.stage
-						});
-						done();
-					}, callback());
-				},
-				function(callback) {
-					async.each(form.nominations, function(nomination, done) {
-						User.findOne({ mes: nomination.recommender }, function(err, member) {
-							if(err) {
-								done(err);
-							}
-							report.nominations.push({
-								name: nomination.name,
-								mes: nomination.mes.toUpperCase(),
-								location: nomination.domain,
-								email: nomination.email,
-								recommender: member.id,
-								reason: nomination.reason,
-								prestige: nomination.prestige
-							});
+					async.each(report.nominations, function(item, done) {
+						item.mes = item.mes.toUpperCase();
+						item.oldRecommender = item.recommender;
+						User.findByMes(item.recommender, function(err, user) {
+							if(err) done(err);
+							item.recommender = user._id;
 							done();
 						});
-					}, callback());
+					}, callback);
 				},
+
+				// Sets the member IDs for the DA listing.
 				function(callback) {
-					async.each(form.das, function(da, done) {
-						User.findOne({ mes: da.member }, function(err, member) {
-							report.das.push({
-								user: member.id,
-								text: da.action
-							});
+					async.each(report.das, function(item, done) {
+						item.oldUser = item.user;
+						User.findByMes(item.user, function(err, user) {
+							if(err) done(err);
+							item.user = user._id;
 							done();
 						});
-					}, callback());					
+					}, callback);
 				},	
 			],
+
+			// Creates the report.
 			function(err) {
-				log('Creating report...');
 				if(err) {
 					log("ERROR: " + err);
-					exports.add(req, res);
+					setFlash("Error creating report!", "error");
+					_parseReportData(report);
+					undoReport(report);
+					if(req.params.id) {
+						exports.edit(req, res);
+					} else {
+						exports.add(req, res);
+					}
 					return;
 				}
-				Report.create(report, function(err, report) {
-					if(err) {
-						log("ERROR: "+ err);
-						exports.add(req, res);
-					} else {
-						log("Report created successfully!");
-						log("ID is: "+report.id);
-						res.redirect('/report');
-					}					
-				});
+
+				if(req.params.id) {
+					Report.findByIdAndUpdate(req.params.id, report, function(err, report) {
+						if(err) {
+							log("ERROR: "+ err);
+							setFlash("Error creating report!", "error");
+							_parseReportData(report);
+							undoReport(report);
+							exports.edit(req, res);
+						} else {
+							setFlash("Report created successfully!");
+							res.redirect('/report/'+req.params.id);
+						}					
+					});
+				} else {
+					Report.create(report, function(err, report) {
+						if(err) {
+							log("ERROR: "+ err);
+							setFlash("Error creating report!", "error");
+							_parseReportData(report);
+							undoReport(report);
+							exports.add(req, res);
+						} else {
+							setFlash("Report created successfully!");
+							res.redirect('/report');
+						}					
+					});
+				}				
 			}
 		);	
 	}
 }
 
+
+/**
+ * Publishes a report.
+ */
+exports.publish = function(req, res) {
+
+// TODO: 
+// Get listing of all users, merge with awards.
+// Update user's prestige and DAs.
+// Set status to "Published".
+
+}
+
+
 /**
  * Utility functions.
  */
+
+/**
+ * Parses a string to a UTC date format.
+ * @param  {String} input
+ * @param  {Function} callback
+ * @return {Number}
+ */
+function _parseDate(input, callback) {
+	var parts = input.match(/(\d)+/g),
+		date = new Date();
+
+	if(!parts) {
+		return null;
+	}
+
+	if(parts.length === 3) {
+		date = new Date(parts[0], parts[1]-1, parts[2]);
+	} else if(parts.length === 2) {
+		date = new Date(parts[0], parts[1]-1);
+	}
+
+	if(callback) {
+		callback(null, date.getTime());
+	} else {
+		return date.getTime();
+	}
+}
+
+
+/**
+ * Undos the parsing on a report.
+ * @param  {Object} report
+ * @return {Object}
+ */
+function _parseReportData(report) {
+	var parseDollars = function(val, key, list) {
+		list[key] = parseFloat(val/100);
+	}
+
+	report.date = dateformat(report.date, "yyyy-mm");
+	
+	report.finance.start = parseFloat( report.finance.start / 100 );
+	report.finance.end = parseFloat( report.finance.end / 100 );
+	underscore.each(report.finance.income, parseDollars);
+	underscore.each(report.finance.expenses, parseDollars);
+
+	underscore.each(report.upcoming, function(item) {
+		item.date = dateformat(item.date, "yyyy-mm-dd");
+	});
+
+	return report;
+}

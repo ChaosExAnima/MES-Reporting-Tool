@@ -1,0 +1,135 @@
+label(class=check('date')) Date:
+	input(type="text", name="date", value=fields.date, placeholder="YYYY-MM")
+
+fieldset#upcoming(class=fields.upcoming.length ? '' : 'close')
+	legend Upcoming Events
+	div.template
+		input(type="date", name="upcoming[i][date]", placeholder="YYYY-MM-DD", disabled).date
+		&nbsp;-&nbsp;
+		input(type="text", name="upcoming[i][name]", placeholder="Event", disabled)
+		a.btn-red.icon-remove
+	- each upcoming, i in fields.upcoming
+		div
+			input(type="date", name="events["+i+"][date]", placeholder="YYYY-MM-DD", value=upcoming.date).date
+			&nbsp;-&nbsp;
+			input(type="text", name="events["+i+"][name]", placeholder="Event", value=upcoming.name)
+			a.btn-red.icon-remove
+	a.btn-green.icon-plus-sign  Add
+
+fieldset#projects(class=fields.projects.length ? '' : 'close')
+	legend Current Projects
+	div.template
+		input(type="text", name="projects[]", placeholder="Project", disabled)
+		a.btn-red.icon-remove
+	- each project in fields.projects
+		div
+			input(type="text", name="projects[]", placeholder="Project", value=project)
+			a.btn-red.icon-remove
+	a.btn-green.icon-plus-sign  Add
+
+fieldset#finances
+	legend Finances
+	label(class=check('finance.start')) Beginning Balance:
+		input(type="text", name="finance[start]", value=fields.finance.start)
+	label(class=check('finance.income.sitefees')) Site Fee Income:
+		input(type="text", name="finance[income][sitefees]", value=fields.finance.income.sitefees)
+	label(class=check('finance.income.donations')) Donation Income:
+		input(type="text", name="finance[income][donations]", value=fields.finance.income.donations)
+	label(class=check('finance.expenses.food')) Food Expenses:
+		input(type="text", name="finance[expenses][food]", value=fields.finance.expenses.food)
+	label(class=check('finance.expenses.space')) Space Expenses:
+		input(type="text", name="finance[expenses][space]", value=fields.finance.expenses.space)
+	label(class=check('finance.expenses.props')) Prop Expenses:
+		input(type="text", name="finance[expenses][props]", value=fields.finance.expenses.props)
+	label(class=check('finance.expenses.fees')) Bank Expenses:
+		input(type="text", name="finance[expenses][fees]", value=fields.finance.expenses.fees)
+
+fieldset#elections(class=fields.elections.length ? '' : 'close')
+	legend Ongoing or Required Elections
+	div.template
+		select(name="elections[i][position]", disabled)
+			- each val in data.positions
+				option(value=val)= val
+		&nbsp;-&nbsp;
+		select(name="elections[i][stage]", disabled)
+			- each val in data.stages
+				option(value=val)= val
+		a.btn-red.icon-remove
+	- each election, i in fields.elections
+		div
+			select(name="elections["+i+"][position]")
+				- each val in data.positions
+					option(value=val, selected=(fields.elections[i].position == val) ? 'selected' : null)= val
+			&nbsp;-&nbsp;
+			select(name="elections["+i+"][stage]")
+				- each val in data.stages
+					option(value=val, selected=(fields.elections[i].stage == val) ? 'selected' : null)= val
+			a.btn-red.icon-remove
+	a.btn-green.icon-plus-sign  Add
+
+fieldset#comments
+	legend Problems, Suggestions, and Comments
+	label Problems:
+		textarea(name="comments[problems]")= fields.comments.problems
+	label Suggestions:
+		textarea(name="comments[suggestions]")= fields.comments.suggestions
+	label Comments:
+		textarea(name="comments[comments]")= fields.comments.comments
+
+fieldset#recommendations(class=fields.nominations.length ? '' : 'close')
+	legend Prestige for Outside Members
+	div.template
+		label Member Name:
+			input(type="text", name="nominations[i][name]", disabled)
+		label Member MES #:
+			input(type="text", name="nominations[i][mes]", disabled)
+		label Domain:
+			input(type="text", name="nominations[i][location]", disabled)
+		label Email:
+			input(type="email", name="nominations[i][email]", disabled)
+		label Recommended By:
+			input(type="text", name="nominations[i][recommender]", class="auto-complete-mes", disabled)
+		label Reason:
+			input(type="text", name="nominations[i][reason]", disabled)
+		label Amount:
+			input(type="text", name="nominations[i][prestige]", disabled)
+		a.btn-red.icon-remove  Remove
+	- each nomination, i in fields.nominations
+		div
+			label Member Name:
+				input(type="text", name="nominations["+i+"][name]", value=nomination.name)
+			label Member MES #:
+				input(type="text", name="nominations["+i+"][mes]", value=nomination.mes)
+			label Domain:
+				input(type="text", name="nominations["+i+"][location]", value=nomination.location)
+			label Email:
+				input(type="email", name="nominations["+i+"][email]", value=nomination.email)
+			label Recommended By:
+				input(type="text", name="nominations["+i+"][recommender]", class="auto-complete-mes", value=nomination.recommender)
+			label Reason:
+				input(type="text", name="nominations["+i+"][reason]", value=nomination.reason)
+			label Amount:
+				input(type="text", name="nominations["+i+"][prestige]", value=nomination.prestige)
+			a.btn-red.icon-remove  Remove
+	a.btn-green.icon-plus-sign  Add
+
+fieldset#disciplinaryactions(class=fields.das.length ? '' : 'close')
+	legend Disciplinary Actions
+	div.template
+		label Member:
+			input(type="text", name="das[i][user]", class="auto-complete-mes", disabled)
+		label Action:
+			input(type="text", name="das[i][text]", disabled)
+		label Notes:
+			textarea(name="das[i][notes]", disabled)
+		a.btn-red.icon-remove  Remove
+	- each action, i in fields.das
+		div
+			label Member:
+				input(type="text", name="das["+i+"][user]", class="auto-complete-mes", value=action.user)
+			label Action:
+				input(type="text", name="das["+i+"][text]", value=action.text)
+			label Notes:
+				textarea(name="das["+i+"][notes]")= action.notes
+			a.btn-red.icon-remove  Remove
+	a.btn-green.icon-plus-sign  Add
