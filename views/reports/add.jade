@@ -1,8 +1,0 @@
-extends ../layout
-
-block content
-	form(action="/report/add", method="post", class="report-add")
-		include partials/form_info
-
-		input(type="submit", value="Submit", class="btn-green")
-		a(class="btn-red", href="/report") Cancel

@@ -1,8 +1,0 @@
-extends ../layout
-
-block content
-	form(action="/report/edit/"+fields._id, method="post")
-		include partials/form_info
-
-		input(type="submit", value="Update", class="btn-green")
-		a(class="btn-red", href="/report/"+fields._id) Cancel

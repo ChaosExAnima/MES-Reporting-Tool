@@ -2,21 +2,27 @@
 	"folders":
 	[
 		{
+			"name": "App",
+			"follow_symlinks": true,
+			"path": "./app",
+		},
+		{
+			"name": "Public",
+			"follow_symlinks": true,
+			"path": "./public"
+		},
+		{
+			"name": "Root",
 			"file_exclude_patterns":
 			[
-				"*.sublime-workspace",
-				".nodemonignore"
+				"*.sublime-workspace"
 			],
 			"folder_exclude_patterns":
 			[
-				"node_modules"
+				"app", "public", ".bower-*"
 			],
 			"follow_symlinks": true,
-			"path": "/home/ephraim/websites/prestige"
-		},
-		{
-			"follow_symlinks": true,
-			"path": "node_modules"
+			"path": "."
 		}
 	]
 }

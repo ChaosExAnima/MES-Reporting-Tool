@@ -1,9 +1,0 @@
-extends ../layout
-
-block content
-	form(action="/report/delete/"+id, method="post")
-		input(type="hidden", name="confirm", value="yes")
-		p Do you want to delete this report?
-
-		input(type="submit", value="Confirm", class="btn-green")
-		a(class="btn-red", href="/report") Cancel

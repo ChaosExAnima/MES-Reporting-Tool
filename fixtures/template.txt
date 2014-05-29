@@ -1,0 +1,232 @@
+Table of Contents
+
+I. Domain and Coordinator
+II. Coordinator Staff
+III. Domain Details & Upcoming Events
+IV. Current Projects
+V. Chapter/Domain Finances
+VI. Ongoing or Required Elections
+VII. Problems, Suggestions and Comments
+VIII. Members New, Transferred and Nominated
+IX. Chapter/Domain Tracked Membership List
+X. Recommendations for Prestige for Members outside of Chapter/Domain
+XI. Disciplinary Actions
+
+=====================================================================
+
+I. Domain and Coordinator
+
+Report Month: <%= dateformat(date, 'mmmm yyyy') %>
+Chapter / Domain Code/Number: NY-004-D
+Chapter / Domain Name: Children of the Lost Eden
+
+City, State: New York, NY
+Region: North East
+Number of Members: <%= numbers.full %>
+Number of Trial Members: <%= numbers.trial %>
+Number of Expired Members: <%= numbers.expired %>
+Number of Total Members: <%= numbers.total %>
+
+<% if(officers.dc) { 
+%>CC/DC Name: <%= officers.dc.name.first %> <%= officers.dc.name.last %>
+Camarilla Membership #: <%= officers.dc.mes %>
+Position: DC
+Standards Passed: <%= officers.dc.standards.join(', ') %>
+<% 
+	var office = filterPosition(officers.dc, 'DC'); 
+	if(office) { 
+%>Office Attained: <%= dateformat(office.starts, 'mm/dd/yyyy') %>
+Office Ends: <%= dateformat(office.ends, 'mm/dd/yyyy') %><% 
+	} 
+} %>
+
+=====================================================================
+
+II. Coordinator Staff:
+
+<% _.each(officers.adcs, function(user) {
+	var office = filterPosition(user, 'aDC'); %>
+<%= office.name %>: <%= user.name.first %> <%= user.name.last %>, <%= user.mes %>
+Office Attained: <%= dateformat(office.starts, 'mm/dd/yyyy') %>
+Standards Passed: <%= user.standards.join(', ') %>
+<% }); 
+%>
+Storyteller Staff:
+
+<% if(officers.dst) { 
+	var office = filterPosition(officers.dst, 'DST'); 
+%>DST: <%= officers.dst.name.first %> <%= officers.dst.name.last %>, <%= officers.dst.mes %>
+Office Attained: <%= dateformat(office.starts, 'mm/dd/yyyy') %>
+Office Ends: <%= dateformat(office.ends, 'mm/dd/yyyy') %>
+Standards Passed: <%= officers.dst.standards.join(', ') %>
+<% 
+} 
+	_.each(officers.vsts, function(user) {
+	var office = filterPosition(user, 'VST'); %>
+<%= office.name %>: <%= user.name.first %> <%= user.name.last %>, <%= user.mes %>
+Office Attained: <%= dateformat(office.starts, 'mm/dd/yyyy') %>
+Office Ends: <%= dateformat(office.ends, 'mm/dd/yyyy') %>
+Standards Passed: <%= user.standards.join(', ') %>
+<% }); 
+%>
+=====================================================================
+
+III. Domain Details & Upcoming Events
+
+Location: New York City
+Contact: dc@mesnyc.org
+Website: http://mesnyc.org
+
+Upcoming Schedule of Events:
+
+January 15th, 2013 - Downtime Meetup
+January 31st, 2013 - Changeling: the Lost FGotM
+February 1st, 2013 - Accord: the Accord FGotM 
+February 1st, 2013 - Vampire: the Requiem FGotM
+February 2nd, 2013 - Mage: the Awakening FGotM
+
+=====================================================================
+
+IV. Current Projects
+
+None.
+
+=====================================================================
+
+V. Chapter/Domain Finances
+
+Beginning Balance: $<%= finance.start %>
+
+Income Total: $<%= finance.income_total %>
+Site Fee: $<%= finance.site_fee %>
+Donations: $<%= finance.donations %>
+
+Expenses Total: $<%= finance.expenses_total %>
+Space: $<%= finance.space %>
+Bank: $<%= finance.bank %>
+
+Ending Balance $<%= finance.ending %>
+
+=====================================================================
+
+VI. Ongoing or Required Elections
+
+None upcoming.
+
+=====================================================================
+
+VII. Problems, Suggestions and Comments
+
+Problems:
+
+*****
+
+Suggestions:
+
+*****
+
+Comments:
+
+=====================================================================
+
+VIII. Members New, Transferred and Nominated
+
+New Members:
+
+*****
+
+Members Transferred:
+
+*****
+
+Members at MC 9+:
+<% _.each(high_mc, function(user) { %>
+<%= user.name.first %> <%= user.name.last %> (MC <%= user.prestige.mc %>), <%= user.mes %><%
+}) %>
+
+*****
+
+Members that earned over 100 Prestige for the month:
+
+Name: Cam#: Prestige:
+<% _.each(high_prestige, function(user) { %>
+<%= user.name.first %> <%= user.name.last %>: <%= user.mes %>: <%= user.gains.g %>G<% 
+}) %>
+
+*****
+
+Members Nominated for Regional Prestige:
+
+Name: Cam#: Prestige: By Whom / Reason
+
+*****
+
+Members Nominated for National Prestige:
+
+*****
+
+Members who gained MC Level:
+<% _.each(mc_gains, function(user) { %>
+<%= user.name.first %> <%= user.name.last %> (MC <%= user.prestige.mc %>), <%= user.mes %><%
+}) %>
+
+=====================================================================
+
+IX. Chapter/Domain Tracked Membership List 
+
+<% _.each(users, function(user) { 
+%>——————————————–
+
+Member Name: <%= user.name.last %>, <%= user.name.first %>
+Membership Number: <%= user.mes %>
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Member Class: <%= user.prestige.mc %>
+Expiration Date: <% if(user.expire !== 0) { %><%= dateformat(user.expire, 'mm/dd/yyyy') %> <% if(user.expired) { %>(EXPIRED)<% } else if(user.trial) { %>(TRIAL)<% } %><% } else { %>Trustee<% } %>
+Camarilla Positions Currently Held: <%= parsePositions(user.positions) %>
+Email Address: <%= user.email %>
+<% 
+if(user.standards.length) { %>
+Standards:
+
+<%= user.standards.join('\n') %><% 
+} %>
+
+Total Prestige Earned This Month: <%= user.gains.gt %>G
+
+<% if(user.gains.gt) { 
+%>Administration (80 max): 
+
+Non-Administrative Game Support (50 max):
+
+Social/Non-Game Support (50 max):
+
+Miscellaneous:
+
+Backdated:
+
+<% } 
+%>Past Cumulative Total: <%= user.prestige.gt %>
+
+General: <%= user.prestige.g %><% if(user.gains.g) { %> + <%= user.gains.g %> = <%= user.prestige.g + user.gains.g %><% } %>
+Regional: <%= user.prestige.r %><% if(user.gains.r) { %> + <%= user.gains.r %> = <%= user.prestige.r + user.gains.r %><% } %>
+National: <%= user.prestige.n %><% if(user.gains.n) { %> + <%= user.gains.n %> = <%= user.prestige.n + user.gains.n %><% } %>
+
+New Cumulative Total: <%= user.prestige.gt + user.gains.gt %>
+
+Last Month’s Total: <%= user.prestige.g %> G, <%= user.prestige.r %> R, <%= user.prestige.n %> N, <%= user.prestige.gt %> GT
+This Month’s Total: <%= user.prestige.g + user.gains.g %> G, <%= user.prestige.r + user.gains.r %> R, <%= user.prestige.n + user.gains.n %> N, <%= user.prestige.gt + user.gains.gt %> GT
+
+<% }); 
+%>=====================================================================
+
+X. Recommendations for Prestige for Members outside of Chapter/Domain
+
+=====================================================================
+
+XI. Disciplinary Actions
+
+=====================================================================
+
+End Report <%= dateformat(date, 'mmmm') %> – <%= dateformat(date, 'yyyy') %>; Compiled by: <%= officers.dc.name.first %> <%= officers.dc.name.last %>, <%= officers.dc.mes %>

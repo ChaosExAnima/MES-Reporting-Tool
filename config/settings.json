@@ -1,0 +1,24 @@
+{
+	"config" : {
+		"domain" : "NY-004-D",
+		"location" : "New York, NY",
+		"region" : "North East",
+		"dc" : "US2012030038",
+		"email" : "dc@nyccamarilla.org",
+		"website" : "http://nyccamarilla.org"
+	},
+	"googleapi" : {
+		"clientid" : "895728636120.apps.googleusercontent.com",
+		"clientsecret" : "O-r0eP71lWkirnkYD1a94xx_",
+		"redirecturl" : "http://localhost:3000/generator",
+		"scope" : "https://www.googleapis.com/auth/drive.file"
+
+	},
+	"nav" : [
+		{
+			"name": "Home",
+			"path": "/",
+			"active": false
+		}
+	]
+}
