@@ -1,12 +1,15 @@
-= MES Reporting Tool =
+MES Reporting Tool
+==================
 
 Reporting tool for generating Domain Reports for the Mind's Eye Society.
 
-== Requirements ==
+Requirements
+------------
 * NodeJS
 * MongoDB
 
-== Installation ==
+Installation
+------------
 * Pull latest git repo.
 * Run "npm install".
 * Run "node app".
