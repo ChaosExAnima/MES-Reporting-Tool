@@ -2,24 +2,10 @@
 	"folders":
 	[
 		{
-			"name": "App",
-			"follow_symlinks": true,
-			"path": "./app",
-		},
-		{
-			"name": "Public",
-			"follow_symlinks": true,
-			"path": "./public"
-		},
-		{
 			"name": "Root",
 			"file_exclude_patterns":
 			[
 				"*.sublime-workspace"
-			],
-			"folder_exclude_patterns":
-			[
-				"app", "public", ".bower-*"
 			],
 			"follow_symlinks": true,
 			"path": "."

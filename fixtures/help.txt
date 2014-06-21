@@ -1,0 +1,9 @@
+This is a command line tool to generate reports.
+
+Parameters:
+<report>	The report to pull last month's data from.
+<requests>	The requests, in CSV format.
+<output>	Optional. The file to write to.
+
+Example:
+node generator.js 06-2013.txt requests.csv 07-2013.txt
