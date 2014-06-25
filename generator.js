@@ -1,12 +1,14 @@
 'use strict';
 
 
+// Variables.
 var fs = require('fs'),
 	path = require('path'),
-	// underscore = require('underscore'),
+	_ = require('underscore'),
 	async = require('async'),
 	util = require('util'),
-	csv = require('csv');
+	csv = require('csv'),
+	dateformat = require('dateformat');
 
 var args = process.argv.slice(2);
 
@@ -15,7 +17,10 @@ if( 10 === args.length ) {
 }
 
 var users = [],
-	data = fs.readFileSync( path.resolve( __dirname, 'fixtures', 'testdata.txt' ) ).toString();
+	data = fs.readFileSync( path.resolve( __dirname, 'fixtures', 'testdata.txt' ) ).toString(),
+	date = new Date();
+	
+date.setMonth(date.getMonth()-1);
 
 write('Found past month\'s data.');
 
@@ -28,13 +33,29 @@ async.each( data.split('Member Name: '), function(string, done) {
 	done();
 });
 
-write('Got '+users.length+' members.');
+write( 'Got ' + users.length + ' members:' );
+write( getExpired(users).length + ' expired.' );
+write( getTrial(users).length + ' trial.' );
 
-var columns = [ 'name', 'category', 'amount', 'backdate', 'description', 'ignore' ],
+var columns = [ 'name', 'category', 'amount', 'backdate', 'description' ],
 	name = '';
 
+var categoryMap = {
+	'Administration (80 max)': 'admin',
+	'Non-Administrative Game Support (50 max)': 'nonadmin',
+	'Social/Non-Game Support (50 max)': 'social',
+	'Miscellaneous': 'misc'
+};
+
 var parser = csv.parse({ columns: columns }, function(err, output) {
-	write('Found '+output.length+' awards.');
+	write( 'Found ' + output.length + ' awards.' );
+
+	var findUser = function (item, callback) {
+		if( item.first === name[1] && item.last === name[0] ) {
+			callback(true);
+		}
+		callback(false);
+	};
 
 	async.each( output, function(row, done) {
 		name = row.name.split(', ');
@@ -42,26 +63,230 @@ var parser = csv.parse({ columns: columns }, function(err, output) {
 		async.detect( users, findUser, function(result) {
 			if( undefined !== result ) {
 				result.awards.push({
-					category: row.category,
+					category: categoryMap[row.category],
 					amount: parseInt( row.amount ),
 					description: row.description,
-					backdate: ( '' === row.backdate ) ? false : row.backdate
+					backdate: ( '' === row.backdate || dateformat(date, 'mmmm') === row.backdate ) ? false : row.backdate
 				});
+
+				result.amount += parseInt( row.amount );
 			}
 
 			done();
 		});
 	});
+
+	async.each( users, function(user, done) {
+		user.awards = _.groupBy( user.awards, 'category' );
+		done();
+	});
+
+	var report = getTemplate(users);
+
+	fs.writeFile( __dirname + '/report.txt', report );
 });
 
 fs.createReadStream( __dirname + '/fixtures/requests.txt' ).pipe(parser);
 
 
-function findUser(item, callback) {
-	if( item.first === name[1] && item.last === name[0] ) {
-		callback(true);
+/**
+ * TEMPLATE FUNCTIONS
+ */
+
+/**
+ * Gets template.
+ * @param  {array} users Users with awards.
+ * @return {string}      The report.
+ */
+function getTemplate(users) {
+	// Member numbers.
+	var numbers = {
+		total: users.length,
+		expired: getExpired(users).length,
+		trial: getTrial(users).length
+	};
+
+	numbers.full = numbers.total - (numbers.expired + numbers.trial);
+
+	// Schedule.
+	// TODO.
+	
+	// Membership report numbers.
+	var highMC = getHighMC(users),
+		highPrestige = getHighPrestige(users);
+
+	// Data to return.
+	var data = {
+		// Data.
+		date: date,
+		numbers: numbers,
+		schedule: '',
+		highMC: highMC,
+		highPrestige: highPrestige,
+		users: users,
+
+		// Functions.
+		dateformat: dateformat,
+		getCategoryTotal: getCategoryTotal,
+		getCategoryValues: getCategoryValues,
+		getBackdated: getBackdated
+	};
+
+	var template = _.template( getFile('template'), data );
+
+	return template;
+}
+
+
+function getCategoryTotal(awards) {
+	var iterator = function(memo, item) {
+		return memo + parseInt( item.amount );
+	};
+
+	return _.reduce( awards, iterator, 0 );
+} 
+
+function getCategoryValues(awards) {
+	awards = _.map(awards, function(item) {
+		var backdate = (item.backdate) ? ' (' + item.backdate + ')' : '';
+		return item.description + backdate + ', ' + item.amount + 'G';
+	});
+
+	if( awards.length === 0 ) {
+		return '';
 	}
-	callback(false);
+
+	return '\n' + awards.sort().join('\n') + '\n';
+}
+
+function getBackdated(awards) {
+	awards = _.flatten( _.values(awards), true);
+
+	awards = _.filter(awards, function(item) {
+		return item.backdate !== false;
+	});
+
+	return getCategoryValues(awards);
+}
+
+
+/**
+ * SEARCH FUNCTIONS
+ */
+
+/**
+ * Gets an array of expired members.
+ * @param  {array} users Users to filter.
+ * @return {array}       Expired members.
+ */
+function getExpired(users) {
+	var predicate = function(item) {
+		return item.expired === true;
+	};
+
+	return _.filter( users, predicate );
+}
+
+
+/**
+ * Gets an array of trial members.
+ * @param  {array} users Users to filter.
+ * @return {array}       Trial members.
+ */
+function getTrial(users) {
+	var predicate = function(item) {
+		return item.trial === true;
+	};
+
+	return _.filter( users, predicate );
+}
+
+
+/**
+ * Gets the high MC members.
+ * @param  {array} users The users.
+ * @return {array}       The high MC users.
+ */
+function getHighMC(users) {
+	var predicate = function(item) {
+		return item.mc >= 9;
+	};
+
+	var sorter = function(item) {
+		return item.mc;
+	};
+
+	return _.sortBy( _.filter( users, predicate ), sorter );
+}
+
+
+/**
+ * Gets the people with over 100 prestige this month.
+ * @param  {array} users The users.
+ * @return {array}       The high prestige users.
+ */
+function getHighPrestige(users) {
+	var predicate = function(item) {
+		return item.amount > 100;
+	};
+
+	var sorter = function(item) {
+		return item.amount;
+	};
+
+	return _.sortBy( _.filter( users, predicate ), sorter );
+}
+
+
+/**
+ * PARSE FUNCTIONS
+ */
+
+/**
+ * Gets a user object from a string.
+ * @param  {String} data The data to look at.
+ * @return {Object}      The user.
+ */
+function parseUser(string) {
+	var mes = getValue('Membership Number: ([a-z]{2}[0-9]+)', string);
+
+	if('' === mes) {
+		return null;
+	}
+
+	var name = getValue(/^([^,]+), ([^\s]+)/, string);
+	var prestige = getValue('This Month.s Total: ([0-9]+).?G, ([0-9]+).?R, ([0-9]+).?N, ([0-9]+).?GT[^\n]*', string);
+	if(!prestige) {
+		prestige = [0, 0, 0, 0];
+	}
+
+	var user = {
+		first: name[1],
+		last: name[0],
+		mes: mes,
+		expire: getDate('Expiration Date: ([0-9\\/]+)[^\\n]*', string),
+		trial: getBoolean('Expiration Date: [0-9\\/]+[^\\n]*(\\(TRIAL\\))[^\n]*', string),
+		standards: getStandards(string),
+		positions: getPositions(string),
+		mc: parseInt( getValue( /Member Class: ?(\d+)/, string ) ),
+		prestige: {
+			g: parseInt(prestige[0]),
+			r: parseInt(prestige[1]),
+			n: parseInt(prestige[2]),
+			gt: parseInt(prestige[3]),
+		},
+		awards: [],
+		amount: 0
+	};
+
+	user.expired = (user.expire < Date.now());
+
+	if(getValue('Expiration Date: ([^0-9\/]+)[^\n]*', string)) {
+		user.expire = 0;
+		user.expired = false;
+	}
+
+	return user;
 }
 
 
@@ -88,50 +313,6 @@ function getValue(regex, string) {
 
 
 /**
- * Gets a user object from a string.
- * @param  {String} data The data to look at.
- * @return {Object}      The user.
- */
-function parseUser(string) {
-	var mes = getValue('Membership Number: ([a-z]{2}[0-9]+)', string);
-
-	if('' === mes) {
-		return null;
-	}
-
-	var name = getValue(/^([^,]+), ([^\s]+)/, string);
-	var prestige = getValue('This Month.s Total: ([0-9]+).?G, ([0-9]+).?R, ([0-9]+).?N, ([0-9]+).?GT[^\n]*', string);
-	if(!prestige) {
-		prestige = [0, 0, 0, 0];
-	}
-
-	var user = {
-		first: name[1],
-		last: name[0],
-		mes: mes,
-		expire: getDate('Expiration Date: ([0-9\\/]+)[^\\n]*', string),
-		trial: getBoolean('Expiration Date: [0-9\\/]+[^\\n]*(\\(TRIAL\\))[^\n]*', string),
-		prestige: {
-			g: parseInt(prestige[0]),
-			r: parseInt(prestige[1]),
-			n: parseInt(prestige[2]),
-			gt: parseInt(prestige[3]),
-		},
-		awards: []
-	};
-
-	user.expired = (user.expire < Date.now());
-
-	if(getValue('Expiration Date: ([^0-9\/]+)[^\n]*', string)) {
-		user.expire = 0;
-		user.expired = false;
-	}
-
-	return user;
-}
-
-
-/**
  * Gets a Date from a string.
  * @param  {String} regex  The RegExp.
  * @param  {String} string The search string.
@@ -146,20 +327,90 @@ function getDate(regex, string) {
 }
 
 
+/**
+ * Gets the Camarilla positions.
+ * @param  {String} string The search string.
+ * @return {Array}         An array of positions.
+ */
+function getPositions(string) {
+	string = getValue('Camarilla Positions Currently Held: ([^\n]+)', string);
+	if(!string) {
+		return [];
+	}
+
+	var positions = [],
+		strings = string.split(/,\s?/);
+
+	strings.forEach( function(val) {
+		positions.push( getValue(/([^\(]+)/, val).trim() );
+	});
+
+	return positions;
+}
+
+
+/**
+ * Gets the standards achieved.
+ * @param  {String} string The search string.
+ * @return {Array}         Array of Standards acheived.
+ */
+function getStandards(string) {
+	if(getBoolean(/(Standards:\n+Total)/, string)) {
+		return [];
+	}
+
+	var tests = [],
+		isInTests = false,
+		lines = string.split('\n');
+
+	for( var i = 0; i < lines.length; i++) {
+		if( lines[i].indexOf('Standards') !== -1 ) {
+			isInTests = true;
+		} else if( lines[i].indexOf('Total Prestige') !== -1 ) {
+			break;
+		} else if( isInTests && lines[i].length !== 0 ) {
+			tests.push(lines[i]);
+		}
+	}
+
+	return tests;
+}
+
+
 function getBoolean(regex, string) {
 	return (getValue(regex, string)) ? true : false;
 }
 
 
+/**
+ * UTILITY FUNCTIONS
+ */
+
+/**
+ * Gets a file in the fixtures directory.
+ * @param  {string} file The file name.
+ * @return {string}      The file loaded.
+ */
 function getFile(file) {
 	return fs.readFileSync(path.resolve(__dirname, 'fixtures/', file + '.txt')).toString();
 }
 
+
+/**
+ * Shows the help.
+ * @return {void}
+ */
 function showHelp() {
 	write( getFile('help') );
 	process.exit();
 }
 
+
+/**
+ * Writes out text provided.
+ * @param  {string} text Text to write.
+ * @return {void}      
+ */
 function write(text) {
 	process.stdout.write( text + '\n' );
 }

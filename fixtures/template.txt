@@ -16,7 +16,7 @@ XI. Disciplinary Actions
 
 I. Domain and Coordinator
 
-Report Month: <%= dateformat(date, 'mmmm yyyy') %>
+Report Month: <%= dateformat( date, 'mmmm yyyy' ) %>
 Chapter / Domain Code/Number: NY-004-D
 Chapter / Domain Name: Children of the Lost Eden
 
@@ -27,48 +27,50 @@ Number of Trial Members: <%= numbers.trial %>
 Number of Expired Members: <%= numbers.expired %>
 Number of Total Members: <%= numbers.total %>
 
-<% if(officers.dc) { 
-%>CC/DC Name: <%= officers.dc.name.first %> <%= officers.dc.name.last %>
-Camarilla Membership #: <%= officers.dc.mes %>
-Position: DC
-Standards Passed: <%= officers.dc.standards.join(', ') %>
-<% 
-	var office = filterPosition(officers.dc, 'DC'); 
-	if(office) { 
-%>Office Attained: <%= dateformat(office.starts, 'mm/dd/yyyy') %>
-Office Ends: <%= dateformat(office.ends, 'mm/dd/yyyy') %><% 
-	} 
-} %>
+DC Name: Ephraim Gregor
+Camarilla Membership #: US2012030038
+Office Attained: 5/30/2013
+Office Ends: 5/30/2014
 
 =====================================================================
 
 II. Coordinator Staff:
 
-<% _.each(officers.adcs, function(user) {
-	var office = filterPosition(user, 'aDC'); %>
-<%= office.name %>: <%= user.name.first %> <%= user.name.last %>, <%= user.mes %>
-Office Attained: <%= dateformat(office.starts, 'mm/dd/yyyy') %>
-Standards Passed: <%= user.standards.join(', ') %>
-<% }); 
-%>
+aDC Chief of Staff: Margaret R., US2008011717
+Office Attained: 05/19/2012
+
+aDC Sites and Finances: Ben Deull, US2011087901
+Office Attained: 04/14/2014
+
+aDC Design: Abby Estes, US2008072573
+Office Attained: 12/28/2013
+
 Storyteller Staff:
 
-<% if(officers.dst) { 
-	var office = filterPosition(officers.dst, 'DST'); 
-%>DST: <%= officers.dst.name.first %> <%= officers.dst.name.last %>, <%= officers.dst.mes %>
-Office Attained: <%= dateformat(office.starts, 'mm/dd/yyyy') %>
-Office Ends: <%= dateformat(office.ends, 'mm/dd/yyyy') %>
-Standards Passed: <%= officers.dst.standards.join(', ') %>
-<% 
-} 
-	_.each(officers.vsts, function(user) {
-	var office = filterPosition(user, 'VST'); %>
-<%= office.name %>: <%= user.name.first %> <%= user.name.last %>, <%= user.mes %>
-Office Attained: <%= dateformat(office.starts, 'mm/dd/yyyy') %>
-Office Ends: <%= dateformat(office.ends, 'mm/dd/yyyy') %>
-Standards Passed: <%= user.standards.join(', ') %>
-<% }); 
-%>
+DST: Matthew Junge, US2009104868
+Office Attained: 07/22/2013
+Office Ends: 07/22/2014
+
+VST Requiem: Brandon Hughes, US2011098018
+Office Attained: 08/19/2013
+Office Ends: 08/19/2014
+
+VST Mage: Craig Page, US2010127101
+Office Attained: 07/15/2013
+Office Ends: 07/15/2014
+
+VST Lost: Abby Estes, US2008072573
+Office Attained: 07/22/2013
+Office Ends: 07/22/2014
+
+VST Accord: Jillian Melnick, US2012050073
+Office Attained: 10/11/2013
+Office Ends: 10/11/2014
+
+VST Masquerade (Cam/Anarch): Ilan Norwood, US2010096642
+Office Attained: 08/26/2013
+Office Ends: 08/26/2014
+
 =====================================================================
 
 III. Domain Details & Upcoming Events
@@ -79,33 +81,28 @@ Website: http://mesnyc.org
 
 Upcoming Schedule of Events:
 
-January 15th, 2013 - Downtime Meetup
-January 31st, 2013 - Changeling: the Lost FGotM
-February 1st, 2013 - Accord: the Accord FGotM 
-February 1st, 2013 - Vampire: the Requiem FGotM
-February 2nd, 2013 - Mage: the Awakening FGotM
+<%= schedule %>
 
 =====================================================================
 
 IV. Current Projects
 
-None.
+Automating domain reports.
+Improving recruitment.
 
 =====================================================================
 
 V. Chapter/Domain Finances
 
-Beginning Balance: $<%= finance.start %>
+Beginning Balance: $0.00
 
-Income Total: $<%= finance.income_total %>
-Site Fee: $<%= finance.site_fee %>
-Donations: $<%= finance.donations %>
+Income Total: $0.00
+Site Fee: $0.00
 
-Expenses Total: $<%= finance.expenses_total %>
-Space: $<%= finance.space %>
-Bank: $<%= finance.bank %>
+Expenses Total: $0.00
+Space: $0.00
 
-Ending Balance $<%= finance.ending %>
+Ending Balance $0.00
 
 =====================================================================
 
@@ -140,8 +137,8 @@ Members Transferred:
 *****
 
 Members at MC 9+:
-<% _.each(high_mc, function(user) { %>
-<%= user.name.first %> <%= user.name.last %> (MC <%= user.prestige.mc %>), <%= user.mes %><%
+<% _.each(highMC, function(user) { %>
+<%= user.first %> <%= user.last %> (MC <%= user.mc %>), <%= user.mes %><%
 }) %>
 
 *****
@@ -149,15 +146,13 @@ Members at MC 9+:
 Members that earned over 100 Prestige for the month:
 
 Name: Cam#: Prestige:
-<% _.each(high_prestige, function(user) { %>
-<%= user.name.first %> <%= user.name.last %>: <%= user.mes %>: <%= user.gains.g %>G<% 
+<% _.each(highPrestige, function(user) { %>
+<%= user.first %> <%= user.last %>: <%= user.mes %>: <%= user.amount %>G<% 
 }) %>
 
 *****
 
 Members Nominated for Regional Prestige:
-
-Name: Cam#: Prestige: By Whom / Reason
 
 *****
 
@@ -166,9 +161,7 @@ Members Nominated for National Prestige:
 *****
 
 Members who gained MC Level:
-<% _.each(mc_gains, function(user) { %>
-<%= user.name.first %> <%= user.name.last %> (MC <%= user.prestige.mc %>), <%= user.mes %><%
-}) %>
+
 
 =====================================================================
 
@@ -177,46 +170,39 @@ IX. Chapter/Domain Tracked Membership List
 <% _.each(users, function(user) { 
 %>——————————————–
 
-Member Name: <%= user.name.last %>, <%= user.name.first %>
+Member Name: <%= user.last %>, <%= user.first %>
 Membership Number: <%= user.mes %>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Member Class: <%= user.prestige.mc %>
 Expiration Date: <% if(user.expire !== 0) { %><%= dateformat(user.expire, 'mm/dd/yyyy') %> <% if(user.expired) { %>(EXPIRED)<% } else if(user.trial) { %>(TRIAL)<% } %><% } else { %>Trustee<% } %>
-Camarilla Positions Currently Held: <%= parsePositions(user.positions) %>
-Email Address: <%= user.email %>
-<% 
-if(user.standards.length) { %>
+Camarilla Positions Currently Held: <%= user.positions.join(', ') %>
+
 Standards:
+<%= (user.standards.length > 0) ? '\n'+user.standards.join('\n')+'\n' : '' %>
+Total Prestige Earned This Month: <%= (user.amount !== 0) ? user.amount + 'G' : '' %>
 
-<%= user.standards.join('\n') %><% 
-} %>
-
-Total Prestige Earned This Month: <%= user.gains.gt %>G
-
-<% if(user.gains.gt) { 
-%>Administration (80 max): 
-
-Non-Administrative Game Support (50 max):
-
-Social/Non-Game Support (50 max):
-
-Miscellaneous:
-
+Administration (80 max): <%= (user.awards.admin) ? getCategoryTotal(user.awards.admin) + 'G' : '' %>
+<%= getCategoryValues(user.awards.admin) %>
+Non-Administrative Game Support (50 max): <%= (user.awards.nonadmin) ? getCategoryTotal(user.awards.nonadmin) + 'G' : '' %>
+<%= getCategoryValues(user.awards.nonadmin) %>
+Social/Non-Game Support (50 max): <%= (user.awards.social) ? getCategoryTotal(user.awards.social) + 'G' : '' %>
+<%= getCategoryValues(user.awards.social) %>
+Miscellaneous: <%= (user.awards.misc) ? getCategoryTotal(user.awards.misc) + 'G' : '' %>
+<%= getCategoryValues(user.awards.misc) %>
 Backdated:
+<%= getBackdated(user.awards) %>
+Past Cumulative Total: <%= user.prestige.gt %>
 
-<% } 
-%>Past Cumulative Total: <%= user.prestige.gt %>
+General: <%= user.prestige.g %><% if(user.amount) { %> + <%= user.amount %> = <%= user.prestige.g + user.amount %><% } %>
+Regional: <%= user.prestige.r %>
+National: <%= user.prestige.n %>
 
-General: <%= user.prestige.g %><% if(user.gains.g) { %> + <%= user.gains.g %> = <%= user.prestige.g + user.gains.g %><% } %>
-Regional: <%= user.prestige.r %><% if(user.gains.r) { %> + <%= user.gains.r %> = <%= user.prestige.r + user.gains.r %><% } %>
-National: <%= user.prestige.n %><% if(user.gains.n) { %> + <%= user.gains.n %> = <%= user.prestige.n + user.gains.n %><% } %>
-
-New Cumulative Total: <%= user.prestige.gt + user.gains.gt %>
+New Cumulative Total: <%= user.prestige.gt + user.amount %>
 
 Last Month’s Total: <%= user.prestige.g %> G, <%= user.prestige.r %> R, <%= user.prestige.n %> N, <%= user.prestige.gt %> GT
-This Month’s Total: <%= user.prestige.g + user.gains.g %> G, <%= user.prestige.r + user.gains.r %> R, <%= user.prestige.n + user.gains.n %> N, <%= user.prestige.gt + user.gains.gt %> GT
+This Month’s Total: <%= user.prestige.g + user.amount %> G, <%= user.prestige.r %> R, <%= user.prestige.n %> N, <%= user.prestige.gt + user.amount %> GT
 
 <% }); 
 %>=====================================================================
@@ -229,4 +215,4 @@ XI. Disciplinary Actions
 
 =====================================================================
 
-End Report <%= dateformat(date, 'mmmm') %> – <%= dateformat(date, 'yyyy') %>; Compiled by: <%= officers.dc.name.first %> <%= officers.dc.name.last %>, <%= officers.dc.mes %>
+End Report <%= dateformat(date, 'mmmm - yyyy') %>; Compiled by: Ephraim Gregor, US2012030038
