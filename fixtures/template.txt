@@ -175,7 +175,7 @@ Membership Number: <%= user.mes %>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Member Class: <%= user.prestige.mc %>
+Member Class: <%= user.mc %>
 Expiration Date: <% if(user.expire !== 0) { %><%= dateformat(user.expire, 'mm/dd/yyyy') %> <% if(user.expired) { %>(EXPIRED)<% } else if(user.trial) { %>(TRIAL)<% } %><% } else { %>Trustee<% } %>
 Camarilla Positions Currently Held: <%= user.positions.join(', ') %>
 

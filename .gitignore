@@ -1,4 +1,3 @@
 node_modules/
 *.sublime-workspace
-.bower-*
-public/lib
+.fuse_*

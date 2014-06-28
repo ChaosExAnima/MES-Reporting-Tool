@@ -12,43 +12,84 @@ var fs = require('fs'),
 
 var args = process.argv.slice(2);
 
-if( 10 === args.length ) {
+if( args.length < 2 ) {
 	showHelp();
 }
 
-var users = [],
-	data = fs.readFileSync( path.resolve( __dirname, 'fixtures', 'testdata.txt' ) ).toString(),
+var lastMonthPath = path.resolve( __dirname, args[0] ),
+	requestsPath = path.resolve( __dirname, args[1] ),
 	date = new Date();
-	
-date.setMonth(date.getMonth()-1);
+date.setMonth( date.getMonth() - 1 );
 
-write('Found past month\'s data.');
+var reportPath = 'report-' + dateformat( date, 'mm-yyyy' ) + '.txt';
 
-// Parse users.
-async.each( data.split('Member Name: '), function(string, done) {
-	var user = parseUser(string);
-	if(user) {
-		users.push(user);
+if( args.length === 3 ) {
+	reportPath = path.resolve( __dirname, args[2] );
+}
+
+var users = [];
+
+fs.readFile( lastMonthPath, parseReport );
+
+
+/**
+ * PARSE FUNCTIONS
+ */
+
+/**
+ * Parses last month's report.
+ * @param  {string} data The file data.
+ * @return {void}
+ */
+function parseReport(err, data) {
+	if( err ) {
+		process.stderr.write('ERROR: Could not read file "' + lastMonthPath + '".\n');
+		process.exit(0);
 	}
-	done();
-});
 
-write( 'Got ' + users.length + ' members:' );
-write( getExpired(users).length + ' expired.' );
-write( getTrial(users).length + ' trial.' );
+	write('Parsing last month\'s data.');
+	data = data.toString('utf-8');
 
-var columns = [ 'name', 'category', 'amount', 'backdate', 'description' ],
-	name = '';
+	// Parse users.
+	async.each( data.split('Member Name: '), function(string, done) {
+		var user = parseUser(string);
+		if(user) {
+			users.push(user);
+		}
+		done();
+	});
 
-var categoryMap = {
-	'Administration (80 max)': 'admin',
-	'Non-Administrative Game Support (50 max)': 'nonadmin',
-	'Social/Non-Game Support (50 max)': 'social',
-	'Miscellaneous': 'misc'
-};
+	write( 'Got ' + users.length + ' members:' );
+	write( '  ' + getExpired(users).length + ' expired.' );
+	write( '  ' + getTrial(users).length + ' trial.' );
 
-var parser = csv.parse({ columns: columns }, function(err, output) {
+	var columns = [ 'name', 'category', 'amount', 'backdate', 'description' ];
+
+	fs.createReadStream( requestsPath ).pipe( csv.parse( { columns: columns }, parseRequests ) );
+}
+
+
+/**
+ * Parses requests file to file awards.
+ * @param  {object} err    Error object.
+ * @param  {string} output The parsed object.
+ * @return {void}
+ */
+function parseRequests(err, output) {
+	if( err ) {
+		process.stderr.write('ERROR: Could not read file "' + requestsPath + '".\n');
+		process.exit(0);
+	}
+
 	write( 'Found ' + output.length + ' awards.' );
+
+	var name = '',
+		categoryMap = {
+		'Administration (80 max)': 'admin',
+		'Non-Administrative Game Support (50 max)': 'nonadmin',
+		'Social/Non-Game Support (50 max)': 'social',
+		'Miscellaneous': 'misc'
+	};
 
 	var findUser = function (item, callback) {
 		if( item.first === name[1] && item.last === name[0] ) {
@@ -81,12 +122,75 @@ var parser = csv.parse({ columns: columns }, function(err, output) {
 		done();
 	});
 
+	// Parses the data and creates the template.
 	var report = getTemplate(users);
+	writeReport(report);
+}
 
-	fs.writeFile( __dirname + '/report.txt', report );
-});
 
-fs.createReadStream( __dirname + '/fixtures/requests.txt' ).pipe(parser);
+/**
+ * Writes the report to disk.
+ * @param  {string} report The report.
+ * @return {void}
+ */
+function writeReport(report) {
+	fs.writeFile( reportPath, report, function(err) {
+		if( err ) {
+			process.stderr.write('ERROR: Could not write file "' + reportPath + '".\n');
+			process.exit(0);
+		} else {
+			write('Successfully wrote report "' + reportPath + '".');
+		}
+	});
+}
+
+
+/**
+ * Gets a user object from a string.
+ * @param  {String} data The data to look at.
+ * @return {Object}      The user.
+ */
+function parseUser(string) {
+	var mes = getValue('Membership Number: ([a-z]{2}[0-9]+)', string);
+
+	if('' === mes) {
+		return null;
+	}
+
+	var name = getValue(/^([^,]+), ([^\s]+)/, string);
+	var prestige = getValue('This Month.s Total: ([0-9]+).?G, ([0-9]+).?R, ([0-9]+).?N, ([0-9]+).?GT[^\n]*', string);
+	if(!prestige) {
+		prestige = [0, 0, 0, 0];
+	}
+
+	var user = {
+		first: name[1],
+		last: name[0],
+		mes: mes,
+		expire: getDate('Expiration Date: ([0-9\\/]+)[^\\n]*', string),
+		trial: getBoolean('Expiration Date: [0-9\\/]+[^\\n]*(\\(TRIAL\\))[^\n]*', string),
+		standards: getStandards(string),
+		positions: getPositions(string),
+		mc: parseInt( getValue( /Member Class: ?(\d+)/, string ) ),
+		prestige: {
+			g: parseInt(prestige[0]),
+			r: parseInt(prestige[1]),
+			n: parseInt(prestige[2]),
+			gt: parseInt(prestige[3]),
+		},
+		awards: [],
+		amount: 0
+	};
+
+	user.expired = (user.expire < Date.now());
+
+	if(getValue('Expiration Date: ([^0-9\/]+)[^\n]*', string)) {
+		user.expire = 0;
+		user.expired = false;
+	}
+
+	return user;
+}
 
 
 /**
@@ -239,56 +343,8 @@ function getHighPrestige(users) {
 
 
 /**
- * PARSE FUNCTIONS
+ * GET FUNCTIONS
  */
-
-/**
- * Gets a user object from a string.
- * @param  {String} data The data to look at.
- * @return {Object}      The user.
- */
-function parseUser(string) {
-	var mes = getValue('Membership Number: ([a-z]{2}[0-9]+)', string);
-
-	if('' === mes) {
-		return null;
-	}
-
-	var name = getValue(/^([^,]+), ([^\s]+)/, string);
-	var prestige = getValue('This Month.s Total: ([0-9]+).?G, ([0-9]+).?R, ([0-9]+).?N, ([0-9]+).?GT[^\n]*', string);
-	if(!prestige) {
-		prestige = [0, 0, 0, 0];
-	}
-
-	var user = {
-		first: name[1],
-		last: name[0],
-		mes: mes,
-		expire: getDate('Expiration Date: ([0-9\\/]+)[^\\n]*', string),
-		trial: getBoolean('Expiration Date: [0-9\\/]+[^\\n]*(\\(TRIAL\\))[^\n]*', string),
-		standards: getStandards(string),
-		positions: getPositions(string),
-		mc: parseInt( getValue( /Member Class: ?(\d+)/, string ) ),
-		prestige: {
-			g: parseInt(prestige[0]),
-			r: parseInt(prestige[1]),
-			n: parseInt(prestige[2]),
-			gt: parseInt(prestige[3]),
-		},
-		awards: [],
-		amount: 0
-	};
-
-	user.expired = (user.expire < Date.now());
-
-	if(getValue('Expiration Date: ([^0-9\/]+)[^\n]*', string)) {
-		user.expire = 0;
-		user.expired = false;
-	}
-
-	return user;
-}
-
 
 /**
  * Searches the data via regex.
