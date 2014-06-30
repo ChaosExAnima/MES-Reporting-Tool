@@ -158,7 +158,7 @@ function parseUser(string) {
 	}
 
 	var name = getValue(/^([^,]+), ([^\s]+)/, string);
-	var prestige = getValue('This Month.s Total: ([0-9]+).?G, ([0-9]+).?R, ([0-9]+).?N, ([0-9]+).?GT[^\n]*', string);
+	var prestige = getValue('This Month.s Total: ([0-9]+).?G,? ([0-9]+).?R,? ([0-9]+).?N,? ([0-9]+).?GT[^\n]*', string);
 	if(!prestige) {
 		prestige = [0, 0, 0, 0];
 	}
@@ -213,7 +213,16 @@ function getTemplate(users) {
 	numbers.full = numbers.total - (numbers.expired + numbers.trial);
 
 	// Schedule.
-	// TODO.
+	var schedule = require('./fixtures/calendar.json'),
+		curdate = new Date().getTime(),
+		events = [];
+
+	_.each( schedule, function( val, key ) {
+		var evDate = new Date(key);
+		if( events.length < 4 && evDate.getTime() > date ) {
+			events.push( dateformat(evDate, 'mmmm dS, yyyy') + ' - ' + val );
+		}
+	});
 	
 	// Membership report numbers.
 	var highMC = getHighMC(users),
@@ -224,7 +233,7 @@ function getTemplate(users) {
 		// Data.
 		date: date,
 		numbers: numbers,
-		schedule: '',
+		schedule: events.join('\n'),
 		highMC: highMC,
 		highPrestige: highPrestige,
 		users: users,

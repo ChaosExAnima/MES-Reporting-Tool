@@ -165,7 +165,7 @@ Members who gained MC Level:
 
 =====================================================================
 
-IX. Chapter/Domain Tracked Membership List 
+IX. Chapter/Domain Tracked Membership List
 
 <% _.each(users, function(user) { 
 %>——————————————–
