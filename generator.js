@@ -219,7 +219,7 @@ function getTemplate(users) {
 
 	_.each( schedule, function( val, key ) {
 		var evDate = new Date(key);
-		if( events.length < 4 && evDate.getTime() > date ) {
+		if( events.length < 4 && evDate.getTime() > curdate ) {
 			events.push( dateformat(evDate, 'mmmm dS, yyyy') + ' - ' + val );
 		}
 	});
