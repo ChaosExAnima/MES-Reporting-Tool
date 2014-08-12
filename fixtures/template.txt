@@ -29,8 +29,8 @@ Number of Total Members: <%= numbers.total %>
 
 DC Name: Ephraim Gregor
 Camarilla Membership #: US2012030038
-Office Attained: 5/30/2013
-Office Ends: 5/30/2014
+Office Attained: 07/16/2014
+Office Ends: 07/16/2015
 
 =====================================================================
 
@@ -39,7 +39,7 @@ II. Coordinator Staff:
 aDC Chief of Staff: Margaret R., US2008011717
 Office Attained: 05/19/2012
 
-aDC Sites and Finances: Ben Deull, US2011087901
+aDC Sites: Ben Deull, US2011087901
 Office Attained: 04/14/2014
 
 aDC Design: Abby Estes, US2008072573
@@ -55,9 +55,9 @@ VST Requiem: Brandon Hughes, US2011098018
 Office Attained: 08/19/2013
 Office Ends: 08/19/2014
 
-VST Mage: Craig Page, US2010127101
-Office Attained: 07/15/2013
-Office Ends: 07/15/2014
+VST Mage: Benjamin Deull, US2011087901
+Office Attained: 05/20/2014
+Office Ends: 05/20/2015
 
 VST Lost: Abby Estes, US2008072573
 Office Attained: 07/22/2013
@@ -179,8 +179,10 @@ Member Class: <%= user.mc %>
 Expiration Date: <% if(user.expire !== 0) { %><%= dateformat(user.expire, 'mm/dd/yyyy') %> <% if(user.expired) { %>(EXPIRED)<% } else if(user.trial) { %>(TRIAL)<% } %><% } else { %>Trustee<% } %>
 Camarilla Positions Currently Held: <%= user.positions.join(', ') %>
 
-Standards:
-<%= (user.standards.length > 0) ? '\n'+user.standards.join('\n')+'\n' : '' %>
+<% if(user.standards.length > 0) { %>Standards:
+
+<%= user.standards.join('\n') %>
+<% } %>
 Total Prestige Earned This Month: <%= (user.amount !== 0) ? user.amount + 'G' : '' %>
 
 Administration (80 max): <%= (user.awards.admin) ? getCategoryTotal(user.awards.admin) + 'G' : '' %>

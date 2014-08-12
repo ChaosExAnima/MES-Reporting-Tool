@@ -85,11 +85,17 @@ function parseRequests(err, output) {
 
 	var name = '',
 		categoryMap = {
-		'Administration (80 max)': 'admin',
-		'Non-Administrative Game Support (50 max)': 'nonadmin',
-		'Social/Non-Game Support (50 max)': 'social',
-		'Miscellaneous': 'misc'
-	};
+			'Administration (80 max)': 'admin',
+			'Non-Administrative Game Support (50 max)': 'nonadmin',
+			'Social/Non-Game Support (50 max)': 'social',
+			'Miscellaneous': 'misc'
+		},
+		capMap = {
+			'admin': 80,
+			'nonadmin': 50,
+			'social': 50,
+			'misc': -1
+		};
 
 	var findUser = function (item, callback) {
 		if( item.first === name[1] && item.last === name[0] ) {
@@ -119,6 +125,17 @@ function parseRequests(err, output) {
 
 	async.each( users, function(user, done) {
 		user.awards = _.groupBy( user.awards, 'category' );
+
+		_.each( user.awards, function(val, key) {
+			var total = _.reduce( val, function( memo, val ) {
+				return memo + val.amount;
+			}, 0);
+			
+			if( capMap[key] < total ) {
+				write( 'Notice: ' + user.first + ' ' + user.last + ' has ' + total + ' prestige in ' + key + '.' );
+			}
+		});
+
 		done();
 	});
 
@@ -433,7 +450,7 @@ function getStandards(string) {
 			isInTests = true;
 		} else if( lines[i].indexOf('Total Prestige') !== -1 ) {
 			break;
-		} else if( isInTests && lines[i].length !== 0 ) {
+		} else if( isInTests && lines[i].length > 2 ) {
 			tests.push(lines[i]);
 		}
 	}
