@@ -45,11 +45,14 @@ Office Attained: 04/14/2014
 aDC Design: Abby Estes, US2008072573
 Office Attained: 12/28/2013
 
+aDC Socials: Cris Fisher, US2002023878
+Office Attained: 08/05/2014
+
 Storyteller Staff:
 
 DST: Matthew Junge, US2009104868
-Office Attained: 07/22/2013
-Office Ends: 07/22/2014
+Office Attained: 08/31/2014
+Office Ends: 08/31/2015
 
 VST Requiem: Brandon Hughes, US2011098018
 Office Attained: 08/19/2013
@@ -60,8 +63,8 @@ Office Attained: 05/20/2014
 Office Ends: 05/20/2015
 
 VST Lost: Abby Estes, US2008072573
-Office Attained: 07/22/2013
-Office Ends: 07/22/2014
+Office Attained: 08/29/2014
+Office Ends: 08/29/2015
 
 VST Accord: Jillian Melnick, US2012050073
 Office Attained: 10/11/2013
@@ -87,8 +90,7 @@ Upcoming Schedule of Events:
 
 IV. Current Projects
 
-Automating domain reports.
-Improving recruitment.
+Nothing ongoing.
 
 =====================================================================
 
