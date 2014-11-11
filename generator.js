@@ -131,8 +131,25 @@ function parseRequests(err, output) {
 				return memo + val.amount;
 			}, 0);
 			
-			if( capMap[key] < total ) {
+			// If we have overcap, reduce the totals.
+			if( capMap[key] < total && -1 !== capMap[key] ) {
 				write( 'Notice: ' + user.first + ' ' + user.last + ' has ' + total + ' prestige in ' + key + '.' );
+				var difference = total - capMap[ key ],
+					remaining = difference,
+					index = 1;
+
+				while ( remaining > 0 ) {
+					var last = _.last( val, index )[0];
+					last.origAmount = last.amount;
+					last.amount = Math.max( 0, last.amount - difference );
+					remaining -= last.amount;
+					console.log( last );
+					write( 'Reduced award for ' + last.description + ' to ' + last.amount + ' from ' + last.origAmount + '.' );
+					index++;
+				}
+
+				// Reduce the total.
+				user.amount -= difference;
 			}
 		});
 
@@ -278,8 +295,9 @@ function getCategoryTotal(awards) {
 
 function getCategoryValues(awards) {
 	awards = _.map(awards, function(item) {
-		var backdate = (item.backdate) ? ' (' + item.backdate + ')' : '';
-		return item.description + backdate + ', ' + item.amount + 'G';
+		var backdate = (item.backdate) ? ' (' + item.backdate + ')' : '',
+			amount = (item.origAmount) ? item.amount + 'G (' + item.origAmount + 'G)' : item.amount + 'G';
+		return item.description + backdate + ', ' + amount;
 	});
 
 	if( awards.length === 0 ) {
