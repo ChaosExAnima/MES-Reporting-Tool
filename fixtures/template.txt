@@ -100,11 +100,13 @@ Beginning Balance: $0.00
 
 Income Total: $0.00
 Site Fee: $0.00
+Interest: $0.00
 
 Expenses Total: $0.00
 Space: $0.00
+Fees: $0.00
 
-Ending Balance $0.00
+Ending Balance: $0.00
 
 =====================================================================
 
