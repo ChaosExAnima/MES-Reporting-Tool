@@ -10,7 +10,6 @@ VII. Problems, Suggestions and Comments
 VIII. Members New, Transferred and Nominated
 IX. Chapter/Domain Tracked Membership List
 X. Recommendations for Prestige for Members outside of Chapter/Domain
-XI. Disciplinary Actions
 
 =====================================================================
 
@@ -214,10 +213,6 @@ This Month’s Total: <%= user.prestige.g + user.amount %> G, <%= user.prestige.
 %>=====================================================================
 
 X. Recommendations for Prestige for Members outside of Chapter/Domain
-
-=====================================================================
-
-XI. Disciplinary Actions
 
 =====================================================================
 
