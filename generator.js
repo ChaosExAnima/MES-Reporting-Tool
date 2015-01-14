@@ -84,6 +84,7 @@ function parseRequests(err, output) {
 	write( 'Found ' + output.length + ' awards.' );
 
 	var name = '',
+		count = 0,
 		categoryMap = {
 			'Administration (80 max)': 'admin',
 			'Non-Administrative Game Support (50 max)': 'nonadmin',
@@ -119,6 +120,7 @@ function parseRequests(err, output) {
 				result.amount += parseInt( row.amount );
 			}
 
+			count++;
 			done();
 		});
 	});
@@ -143,8 +145,7 @@ function parseRequests(err, output) {
 					last.origAmount = last.amount;
 					last.amount = Math.max( 0, last.amount - difference );
 					remaining -= last.amount;
-					console.log( last );
-					write( 'Reduced award for ' + last.description + ' to ' + last.amount + ' from ' + last.origAmount + '.' );
+					write( '  Reduced award for ' + last.description + ' to ' + last.amount + ' from ' + last.origAmount + '.' );
 					index++;
 				}
 
@@ -155,6 +156,8 @@ function parseRequests(err, output) {
 
 		done();
 	});
+
+	write( 'Awarded ' + count + ' awards.' );
 
 	// Parses the data and creates the template.
 	var report = getTemplate(users);
