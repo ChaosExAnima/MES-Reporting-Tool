@@ -38,9 +38,6 @@ II. Coordinator Staff:
 aDC Chief of Staff: Margaret R., US2008011717
 Office Attained: 05/19/2012
 
-aDC Sites: Ben Deull, US2011087901
-Office Attained: 04/14/2014
-
 aDC Design: Abby Estes, US2008072573
 Office Attained: 12/28/2013
 
@@ -53,21 +50,21 @@ DST: Matthew Junge, US2009104868
 Office Attained: 08/31/2014
 Office Ends: 08/31/2015
 
-VST Requiem: Brandon Hughes, US2011098018
-Office Attained: 09/13/2014
-Office Ends: 09/13/2015
+VST Requiem: Vacant
+Office Attained: N/A
+Office Ends: N/A
 
-VST Mage: Benjamin Deull, US2011087901
-Office Attained: 05/20/2014
-Office Ends: 05/20/2015
+VST Mage: Vacant
+Office Attained: N/A
+Office Ends: N/A
 
 VST Lost: Abby Estes, US2008072573
 Office Attained: 08/29/2014
 Office Ends: 08/29/2015
 
-VST Accord: Katrina Schonheyder, US2002022357
-Office Attained: 10/28/2014
-Office Ends: 10/28/2015
+VST Accord: Matt Blank, US2007039568
+Office Attained: 05/23/2015
+Office Ends: 05/23/2016
 
 VST Masquerade (Cam/Anarch): Ilan Norwood, US2010096642
 Office Attained: 10/02/2014
