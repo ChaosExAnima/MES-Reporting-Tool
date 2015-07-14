@@ -118,6 +118,8 @@ function parseRequests(err, output) {
 				});
 
 				result.amount += parseInt( row.amount );
+			} else {
+				write( 'Warning: Could not find member "' + name + '"!' );
 			}
 
 			count++;
@@ -130,6 +132,9 @@ function parseRequests(err, output) {
 
 		_.each( user.awards, function(val, key) {
 			var total = _.reduce( val, function( memo, val ) {
+				if ( val.backdate ) {
+					return memo;
+				}
 				return memo + val.amount;
 			}, 0);
 			
@@ -153,6 +158,14 @@ function parseRequests(err, output) {
 				user.amount -= difference;
 			}
 		});
+
+		user.awards.backdated =
+			_.chain( user.awards )
+			.flatten()
+			.filter(function( item ) {
+				return item.backdate !== false;
+			})
+			.value();
 
 		done();
 	});
@@ -278,8 +291,7 @@ function getTemplate(users) {
 		// Functions.
 		dateformat: dateformat,
 		getCategoryTotal: getCategoryTotal,
-		getCategoryValues: getCategoryValues,
-		getBackdated: getBackdated
+		getCategoryValues: getCategoryValues
 	};
 
 	var template = _.template( getFile('template'), data );
@@ -308,16 +320,6 @@ function getCategoryValues(awards) {
 	}
 
 	return '\n' + awards.sort().join('\n') + '\n';
-}
-
-function getBackdated(awards) {
-	awards = _.flatten( _.values(awards), true);
-
-	awards = _.filter(awards, function(item) {
-		return item.backdate !== false;
-	});
-
-	return getCategoryValues(awards);
 }
 
 

@@ -138,16 +138,14 @@ Members Transferred:
 
 Members at MC 9+:
 <% _.each(highMC, function(user) { %>
-<%= user.first %> <%= user.last %> (MC <%= user.mc %>), <%= user.mes %><%
+<%= user.first %> <%= user.last %>, MC <%= user.mc %><%
 }) %>
 
 *****
 
 Members that earned over 100 Prestige for the month:
-
-Name: Cam#: Prestige:
 <% _.each(highPrestige, function(user) { %>
-<%= user.first %> <%= user.last %>: <%= user.mes %>: <%= user.amount %>G<% 
+<%= user.first %> <%= user.last %>, <%= user.amount %>G<% 
 }) %>
 
 *****
@@ -193,8 +191,8 @@ Social/Non-Game Support (50 max): <%= (user.awards.social) ? getCategoryTotal(us
 <%= getCategoryValues(user.awards.social) %>
 Miscellaneous: <%= (user.awards.misc) ? getCategoryTotal(user.awards.misc) + 'G' : '' %>
 <%= getCategoryValues(user.awards.misc) %>
-Backdated:
-<%= getBackdated(user.awards) %>
+Backdated: <%= (user.awards.backdated) ? getCategoryTotal(user.awards.backdated) + 'G' : '' %>
+<%= getCategoryValues(user.awards.backdated) %>
 Past Cumulative Total: <%= user.prestige.gt %>
 
 General: <%= user.prestige.g %><% if(user.amount) { %> + <%= user.amount %> = <%= user.prestige.g + user.amount %><% } %>
