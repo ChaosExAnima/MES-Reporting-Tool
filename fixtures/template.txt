@@ -28,8 +28,8 @@ Number of Total Members: <%= numbers.total %>
 
 DC Name: Ephraim Gregor
 Camarilla Membership #: US2012030038
-Office Attained: 07/16/2014
-Office Ends: 07/16/2015
+Office Attained: 07/13/2015
+Office Ends: 07/13/2016
 
 =====================================================================
 
