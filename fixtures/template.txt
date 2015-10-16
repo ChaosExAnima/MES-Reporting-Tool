@@ -4,20 +4,20 @@ I. Domain and Coordinator
 II. Coordinator Staff
 III. Domain Details & Upcoming Events
 IV. Current Projects
-V. Chapter/Domain Finances
+V.  Domain Finances
 VI. Ongoing or Required Elections
 VII. Problems, Suggestions and Comments
 VIII. Members New, Transferred and Nominated
-IX. Chapter/Domain Tracked Membership List
-X. Recommendations for Prestige for Members outside of Chapter/Domain
+IX. Domain Tracked Membership List
+X. Prestige Awards for Members outside of Domain
 
 =====================================================================
 
 I. Domain and Coordinator
 
 Report Month: <%= dateformat( date, 'mmmm yyyy' ) %>
-Chapter / Domain Code/Number: NY-004-D
-Chapter / Domain Name: Children of the Lost Eden
+Domain Code: NY-004-D
+Domain Name: Children of the Lost Eden
 
 City, State: New York, NY
 Region: North East
@@ -54,13 +54,9 @@ VST Requiem: Laura Boustead, US2012100158
 Office Attained: 07/07/2015
 Office Ends: 07/07/2016
 
-VST Mage: Vacant
-Office Attained: N/A
-Office Ends: N/A
-
-VST Lost: Abby Estes, US2008072573
-Office Attained: 08/29/2014
-Office Ends: 08/29/2015
+VST Lost: Ephraim Gregor, US2012030038
+Office Attained: 08/21/2015
+Office Ends: 08/21/2016
 
 VST Accord: Matt Blank, US2007039568
 Office Attained: 05/23/2015
@@ -90,7 +86,7 @@ Nothing ongoing.
 
 =====================================================================
 
-V. Chapter/Domain Finances
+V. Domain Finances
 
 Beginning Balance: $0.00
 
@@ -145,7 +141,7 @@ Members at MC 9+:
 
 Members that earned over 100 Prestige for the month:
 <% _.each(highPrestige, function(user) { %>
-<%= user.first %> <%= user.last %>, <%= user.amount %>G<% 
+<%= user.first %> <%= user.last %>, <%= user.amount %>G<%
 }) %>
 
 *****
@@ -163,9 +159,9 @@ Members who gained MC Level:
 
 =====================================================================
 
-IX. Chapter/Domain Tracked Membership List
+IX. Domain Tracked Membership List
 
-<% _.each(users, function(user) { 
+<% _.each(users, function(user) {
 %>——————————————–
 
 Member Name: <%= user.last %>, <%= user.first %>
@@ -204,10 +200,10 @@ New Cumulative Total: <%= user.prestige.gt + user.amount %>
 Last Month’s Total: <%= user.prestige.g %> G, <%= user.prestige.r %> R, <%= user.prestige.n %> N, <%= user.prestige.gt %> GT
 This Month’s Total: <%= user.prestige.g + user.amount %> G, <%= user.prestige.r %> R, <%= user.prestige.n %> N, <%= user.prestige.gt + user.amount %> GT
 
-<% }); 
+<% });
 %>=====================================================================
 
-X. Recommendations for Prestige for Members outside of Chapter/Domain
+X. Prestige Awards for Members outside of Domain
 
 =====================================================================
 
