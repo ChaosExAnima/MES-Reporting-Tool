@@ -101,8 +101,9 @@ function parseRequests(err, output) {
 	var findUser = function (item, callback) {
 		if( item.first === name[1] && item.last === name[0] ) {
 			callback(true);
+		} else {
+			callback(false);
 		}
-		callback(false);
 	};
 
 	async.each( output, function(row, done) {
