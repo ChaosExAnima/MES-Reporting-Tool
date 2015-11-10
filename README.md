@@ -1,6 +1,7 @@
 MES Reporting Tool
 ==================
 
+[![Build Status](https://travis-ci.org/ChaosExAnima/MES-Reporting-Tool.svg?branch=master)](https://travis-ci.org/ChaosExAnima/MES-Reporting-Tool)
 [![Dependency Status](https://david-dm.org/ChaosExAnima/MES-Reporting-Tool.svg)](https://david-dm.org/ChaosExAnima/MES-Reporting-Tool)
 
 Command line tool for generating Domain Reports for the Mind's Eye Society.
