@@ -137,7 +137,7 @@ function parseRequests(err, output) {
 				}
 				return memo + val.amount;
 			}, 0);
-			
+
 			// If we have overcap, reduce the totals.
 			if( capMap[key] < total && -1 !== capMap[key] ) {
 				write( 'Notice: ' + user.first + ' ' + user.last + ' has ' + total + ' prestige in ' + key + '.' );
@@ -273,7 +273,7 @@ function getTemplate(users) {
 			events.push( dateformat(evDate, 'mmmm dS, yyyy') + ' - ' + val );
 		}
 	});
-	
+
 	// Membership report numbers.
 	var highMC = getHighMC(users),
 		highPrestige = getHighPrestige(users);
@@ -306,7 +306,7 @@ function getCategoryTotal(awards) {
 	};
 
 	return _.reduce( awards, iterator, 0 );
-} 
+}
 
 function getCategoryValues(awards) {
 	awards = _.map(awards, function(item) {
@@ -398,12 +398,12 @@ function getHighPrestige(users) {
 /**
  * Searches the data via regex.
  * @param  {String} regex The regex.
- * @return {String|Boolean} 
+ * @return {String|Boolean}
  */
 function getValue(regex, string) {
 	if(!util.isRegExp(regex)) {
 		regex = new RegExp('^'+regex+'$', 'im');
-	}	
+	}
 	var match = string.match( regex );
 
 	if(match !== null) {
@@ -411,7 +411,7 @@ function getValue(regex, string) {
 			return match.slice(1);
 		} else {
 			return match[1];
-		}		
+		}
 	}
 	return '';
 }
@@ -514,7 +514,7 @@ function showHelp() {
 /**
  * Writes out text provided.
  * @param  {string} text Text to write.
- * @return {void}      
+ * @return {void}
  */
 function write(text) {
 	process.stdout.write( text + '\n' );

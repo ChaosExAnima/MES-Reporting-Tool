@@ -1,18 +1,24 @@
 {
-  "name": "dc-report",
-  "description": "Report generating tool.",
-  "version": "0.0.1",
-  "private": true,
-  "dependencies": {
-    "dateformat": "1.0.x",
-    "async": "~0.9.0",
-    "underscore": "~1.6.0",
-    "csv": "~0.4.0"
-  },
-  "main": "server",
-  "devDependencies": {
-    "grunt-env": "~0.4.1",
-    "grunt-contrib-watch": "latest",
-    "grunt-contrib-jshint": "latest"
-  }
+	"name": "dc-report",
+	"description": "Report generating tool.",
+	"version": "1.0.0",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ChaosExAnima/MES-Reporting-Tool"
+	},
+	"bin": {
+		"gen": "./gen"
+	},
+	"dependencies": {
+		"dateformat": "1.0.x",
+		"async": "1.5.x",
+		"underscore": "1.8.x",
+		"csv": "0.4.x"
+	},
+	"devDependencies": {
+		"grunt-env": "latest",
+		"grunt-contrib-watch": "latest",
+		"grunt-contrib-jshint": "latest"
+	}
 }
