@@ -15,7 +15,7 @@ Installation
 ------------
 * Pull latest git repo.
 * Run "npm install".
-* Then run "node generator.js".
+* Then run "./gen".
 
 **Parameters**<br>
 \<report>	The report to pull last month's data from.<br>
