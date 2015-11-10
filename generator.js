@@ -295,9 +295,7 @@ function getTemplate(users) {
 		getCategoryValues: getCategoryValues
 	};
 
-	var template = _.template( getFile('template'), data );
-
-	return template;
+	return _.template( getFile('template') )( data );
 }
 
 
