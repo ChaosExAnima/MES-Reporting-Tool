@@ -47,8 +47,8 @@ Office Attained: 07/15/2015
 Storyteller Staff:
 
 DST: Matthew Junge, US2009104868
-Office Attained: 08/31/2014
-Office Ends: 08/31/2015
+Office Attained: 10/14/2015
+Office Ends: 10/14/2016
 
 VST Requiem: Laura Boustead, US2012100158
 Office Attained: 07/07/2015
@@ -74,9 +74,7 @@ Location: New York City
 Contact: dc@mesnyc.org
 Website: http://mesnyc.org
 
-Upcoming Schedule of Events:
-
-<%= schedule %>
+Upcoming events can be found here: http://www.mesnyc.org/events/
 
 =====================================================================
 
@@ -171,12 +169,7 @@ Membership Number: <%= user.mes %>
 
 Member Class: <%= user.mc %>
 Expiration Date: <% if(user.expire !== 0) { %><%= dateformat(user.expire, 'mm/dd/yyyy') %> <% if(user.expired) { %>(EXPIRED)<% } else if(user.trial) { %>(TRIAL)<% } %><% } else { %>Trustee<% } %>
-Camarilla Positions Currently Held: <%= user.positions.join(', ') %>
 
-<% if(user.standards.length > 0) { %>Standards:
-
-<%= user.standards.join('\n') %>
-<% } %>
 Total Prestige Earned This Month: <%= (user.amount !== 0) ? user.amount + 'G' : '' %>
 
 Administration (80 max): <%= (user.awards.admin) ? getCategoryTotal(user.awards.admin) + 'G' : '' %>
@@ -204,6 +197,9 @@ This Month’s Total: <%= user.prestige.g + user.amount %> G, <%= user.prestige.
 %>=====================================================================
 
 X. Prestige Awards for Members outside of Domain
+
+Laura Boustead, US2012100158: 50G, Admin, VST Requiem – MA-003-D
+Nathan Kelly, US2010066207: 40G, Admin, VST Masquerade – MA-003-D
 
 =====================================================================
 
