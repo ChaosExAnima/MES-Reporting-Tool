@@ -38,12 +38,6 @@ II. Coordinator Staff:
 aDC Chief of Staff: Margaret R., US2008011717
 Office Attained: 05/19/2012
 
-aDC Design: Abby Estes, US2008072573
-Office Attained: 12/28/2013
-
-aDC Sites: Matt Blank, US2007039568
-Office Attained: 07/15/2015
-
 Storyteller Staff:
 
 DST: Matthew Junge, US2009104868
@@ -59,8 +53,8 @@ Office Attained: 08/21/2015
 Office Ends: 08/21/2016
 
 VST Accord: Matt Blank, US2007039568
-Office Attained: 05/23/2015
-Office Ends: 05/23/2016
+Office Attained: 05/11/2016
+Office Ends: 05/11/2017
 
 VST Masquerade (Cam/Anarch): Nathan Kelly, US2010066207
 Office Attained: 07/01/2015
@@ -180,7 +174,7 @@ Social/Non-Game Support (50 max): <%= (user.awards.social) ? getCategoryTotal(us
 <%= getCategoryValues(user.awards.social) %>
 Miscellaneous: <%= (user.awards.misc) ? getCategoryTotal(user.awards.misc) + 'G' : '' %>
 <%= getCategoryValues(user.awards.misc) %>
-Backdated: <%= (user.awards.backdated) ? getCategoryTotal(user.awards.backdated) + 'G' : '' %>
+Backdated: <%= (user.awards.backdated > 0) ? getCategoryTotal(user.awards.backdated) + 'G' : '' %>
 <%= getCategoryValues(user.awards.backdated) %>
 Past Cumulative Total: <%= user.prestige.gt %>
 
@@ -198,8 +192,8 @@ This Month’s Total: <%= user.prestige.g + user.amount %> G, <%= user.prestige.
 
 X. Prestige Awards for Members outside of Domain
 
-Laura Boustead, US2012100158: 50G, Admin, VST Requiem – MA-003-D
-Nathan Kelly, US2010066207: 40G, Admin, VST Masquerade – MA-003-D
+Laura Boustead, US2012100158: 50G, Admin, VST Requiem – MA-003
+Nathan Kelly, US2010066207: 40G, Admin, VST Masquerade – MA-003
 
 =====================================================================
 
