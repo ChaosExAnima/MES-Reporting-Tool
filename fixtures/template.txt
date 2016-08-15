@@ -56,9 +56,9 @@ VST Accord: Matt Blank, US2007039568
 Office Attained: 05/11/2016
 Office Ends: 05/11/2017
 
-VST Masquerade (Cam/Anarch): Nathan Kelly, US2010066207
-Office Attained: 07/01/2015
-Office Ends: 07/01/2016
+VST Masquerade (Cam/Anarch): Sean McKeown, US2002045258
+Office Attained: 07/25/2016
+Office Ends: 07/25/2017
 
 =====================================================================
 
@@ -193,7 +193,6 @@ This Month’s Total: <%= user.prestige.g + user.amount %> G, <%= user.prestige.
 X. Prestige Awards for Members outside of Domain
 
 Laura Boustead, US2012100158: 50G, Admin, VST Requiem – MA-003
-Nathan Kelly, US2010066207: 40G, Admin, VST Masquerade – MA-003
 
 =====================================================================
 
