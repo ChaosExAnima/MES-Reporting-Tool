@@ -28,8 +28,8 @@ Number of Total Members: <%= numbers.total %>
 
 DC Name: Ephraim Gregor
 Camarilla Membership #: US2012030038
-Office Attained: 07/13/2015
-Office Ends: 07/13/2016
+Office Attained: 09/12/2016
+Office Ends: 09/12/2017
 
 =====================================================================
 
@@ -44,16 +44,16 @@ Office Attained: 09/2015
 Storyteller Staff:
 
 DST: Matthew Junge, US2009104868
-Office Attained: 10/14/2015
-Office Ends: 10/14/2016
+Office Attained: 12/4/2016
+Office Ends: 12/4/2017
 
 VST Requiem: Laura Boustead, US2012100158
 Office Attained: 08/28/2016
 Office Ends: 08/28/2017
 
-VST Lost: Ephraim Gregor, US2012030038
-Office Attained: 08/21/2015
-Office Ends: 08/21/2016
+VST Lost: Ilan Norwood, US2010096642
+Office Attained: 10/28/2016
+Office Ends: 10/28/2017
 
 VST Accord: Matt Blank, US2007039568
 Office Attained: 05/11/2016

@@ -263,18 +263,6 @@ function getTemplate(users) {
 
 	numbers.full = numbers.total - (numbers.expired + numbers.trial);
 
-	// Schedule.
-	var schedule = require('./fixtures/calendar.json'),
-		curdate = new Date().getTime(),
-		events = [];
-
-	_.each( schedule, function( val, key ) {
-		var evDate = new Date(key);
-		if( events.length < 4 && evDate.getTime() > curdate ) {
-			events.push( dateformat(evDate, 'mmmm dS, yyyy') + ' - ' + val );
-		}
-	});
-
 	// Membership report numbers.
 	var highMC = getHighMC(users),
 		highPrestige = getHighPrestige(users);
@@ -284,7 +272,6 @@ function getTemplate(users) {
 		// Data.
 		date: date,
 		numbers: numbers,
-		schedule: events.join('\n'),
 		highMC: highMC,
 		highPrestige: highPrestige,
 		users: users,
