@@ -38,9 +38,6 @@ II. Coordinator Staff:
 aDC Chief of Staff: Margaret R., US2008011717
 Office Attained: 05/2012
 
-aDC Media: Brandon Stalnaker, US2014030053
-Office Attained: 09/2015
-
 Storyteller Staff:
 
 DST: Matthew Junge, US2009104868
@@ -195,8 +192,8 @@ This Month’s Total: <%= user.prestige.g + user.amount %> G, <%= user.prestige.
 
 X. Prestige Awards for Members outside of Domain
 
-Laura Boustead, US2012100158: 50G, Admin, VST Requiem – MA-003
-
+<% _.each( outsideAwards, award => { %><%= award.name %>, <%= award.mes %>: <%= award.amount %> G, <%= award.category %>, <%= award.description %> – <%= award.location %>
+<% }); %>
 =====================================================================
 
 End Report <%= dateformat(date, 'mmmm - yyyy') %>; Compiled by: Ephraim Gregor, US2012030038

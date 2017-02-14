@@ -28,6 +28,7 @@ if( args.length === 3 ) {
 }
 
 var users = [];
+var outsideAwards = [];
 
 fs.readFile( lastMonthPath, parseReport );
 
@@ -106,6 +107,8 @@ function parseRequests(err, output) {
 		}
 	};
 
+	const outsiders = require( './fixtures/outside-members' );
+
 	async.each( output, function(row, done) {
 		name = row.name.split(', ');
 
@@ -120,7 +123,14 @@ function parseRequests(err, output) {
 
 				result.amount += parseInt( row.amount );
 			} else {
-				write( 'Warning: Could not find member "' + name + '"!' );
+				let outsider = _.find( outsiders, user => {
+					return user.name === name.slice().reverse().join( ' ' );
+				});
+				if ( outsider ) {
+					outsideAwards.push( Object.assign( {}, outsider, row ) );
+				} else {
+					write( 'Warning: Could not find member "' + name + '"!' );
+				}
 			}
 
 			count++;
@@ -275,6 +285,7 @@ function getTemplate(users) {
 		highMC: highMC,
 		highPrestige: highPrestige,
 		users: users,
+		outsideAwards,
 
 		// Functions.
 		dateformat: dateformat,
