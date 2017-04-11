@@ -160,7 +160,7 @@ function parseRequests(err, output) {
 					var last = _.last( val, index )[0];
 					last.origAmount = last.amount;
 					last.amount = Math.max( 0, last.amount - difference );
-					remaining -= last.amount;
+					remaining -= last.origAmount;
 					write( '  Reduced award for ' + last.description + ' to ' + last.amount + ' from ' + last.origAmount + '.' );
 					index++;
 				}
